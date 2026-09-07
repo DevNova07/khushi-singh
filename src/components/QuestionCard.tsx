@@ -1,5 +1,5 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, Heart } from 'lucide-react';
 import { romanticAudio } from '../audio/romanticSynth';
 import { triggerCelebrationConfetti } from '../utils/confetti';
@@ -21,10 +21,31 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
   buttonText,
   onAnswer
 }) => {
-  const handleClick = () => {
+  const [teaseMessage, setTeaseMessage] = useState<string | null>(null);
+  const [noPosition, setNoPosition] = useState({ x: 0, y: 0 });
+
+  const handleYesClick = () => {
     romanticAudio.playCelebrationChime();
     triggerCelebrationConfetti();
     onAnswer();
+  };
+
+  const handleNoClick = () => {
+    romanticAudio.playPop();
+    setTeaseMessage("Aise kaise nahi? Meri princess ko toh dekhna hi padega! 😜❤️");
+    triggerCelebrationConfetti();
+    setTimeout(() => {
+      onAnswer();
+    }, 1500);
+  };
+
+  const handleNoHover = () => {
+    if (window.innerWidth >= 768) {
+      const x = (Math.random() - 0.5) * 80;
+      const y = (Math.random() - 0.5) * 40;
+      setNoPosition({ x, y });
+      romanticAudio.playPop();
+    }
   };
 
   // Clean button text so emojis never duplicate or wrap awkwardly
@@ -71,13 +92,15 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
           </p>
         )}
 
-        {/* Super Cute, Flawlessly Centered Romantic Candy Pill Button */}
-        <div className="flex justify-center pt-1">
+        {/* Two Options: Option 1 (YES) + Option 2 (Playful NO / Nakhre) */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-3.5 pt-1">
+          
+          {/* Option 1: Main Romantic Yes Button */}
           <motion.button
             whileHover={{ scale: 1.04, y: -2 }}
             whileTap={{ scale: 0.96 }}
-            onClick={handleClick}
-            className="cute-romantic-btn group relative inline-flex items-center justify-center flex-nowrap gap-2 sm:gap-3 px-6 sm:px-9 py-3.5 sm:py-4 rounded-full text-white font-sans font-bold text-sm sm:text-base cursor-pointer overflow-hidden shadow-2xl max-w-full"
+            onClick={handleYesClick}
+            className="cute-romantic-btn group relative inline-flex items-center justify-center flex-nowrap gap-2 sm:gap-2.5 px-6 sm:px-8 py-3.5 sm:py-3.5 rounded-full text-white font-sans font-bold text-sm sm:text-base cursor-pointer overflow-hidden shadow-2xl w-full sm:w-auto"
           >
             {/* Ambient Shimmer Sweep */}
             <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/40 to-transparent pointer-events-none" />
@@ -99,7 +122,35 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
               )}
             </span>
           </motion.button>
+
+          {/* Option 2: Playful Nakhre Button */}
+          <motion.button
+            animate={{ x: noPosition.x, y: noPosition.y }}
+            transition={{ type: "spring", stiffness: 350, damping: 20 }}
+            onMouseEnter={handleNoHover}
+            whileTap={{ scale: 0.94 }}
+            onClick={handleNoClick}
+            className="inline-flex items-center justify-center gap-1.5 px-5 py-3 sm:py-3.5 rounded-full bg-white/95 hover:bg-pink-50 border border-pink-200/90 text-xs sm:text-sm font-sans font-semibold text-[#8A6875] hover:text-[#E91E63] transition-colors cursor-pointer shadow-sm hover:shadow w-full sm:w-auto"
+          >
+            <span>Nahi dekhna</span>
+            <span className="text-sm">🙈</span>
+          </motion.button>
+
         </div>
+
+        {/* Playful Nakhre Toast Message */}
+        <AnimatePresence>
+          {teaseMessage && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.85, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.85 }}
+              className="mt-4 px-4 py-2.5 rounded-2xl bg-gradient-to-r from-[#E91E63] to-[#C2185B] text-white text-xs sm:text-sm font-serif-luxury font-medium shadow-xl inline-flex items-center gap-1.5 animate-bounce"
+            >
+              <span>{teaseMessage}</span>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Sweet Helper Text */}
         <p className="text-[11px] text-[#8A6875]/70 font-mono mt-3.5 tracking-wider uppercase">
