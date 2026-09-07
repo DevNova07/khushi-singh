@@ -22,6 +22,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
   onAnswer
 }) => {
   const [noPosition, setNoPosition] = useState({ x: 0, y: 0 });
+  const [noRotation, setNoRotation] = useState(0);
   const [noAttempts, setNoAttempts] = useState(0);
 
   const playfulPhrases = [
@@ -31,37 +32,41 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
     "Koshish bekar hai 😝",
     "Main nahi rukne wala! 🏃‍♂️💨",
     "Maan jao na meri Khushi! 🥹❤️",
+    "Pakad nahi paogi! 🏃‍♀️💨",
     "Ab toh YES hi dabana padega! 💖",
     "Haan dabao na please! 🥰"
   ];
 
-  const evadeNoButton = (e: React.MouseEvent | React.TouchEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    romanticAudio.playPop();
+  const evadeNoButton = (e?: React.SyntheticEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    romanticAudio.playBoing();
 
     // Mobile vs Desktop boundaries
     const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
-    const maxX = isMobile ? 115 : 200;
-    const maxY = isMobile ? 85 : 125;
+    const maxX = isMobile ? 120 : 220;
+    const maxY = isMobile ? 90 : 140;
 
-    // Alternate quadrants with increasing distance
-    const currentAttempt = noAttempts + 1;
-    const distanceFactor = Math.min(1 + currentAttempt * 0.2, 2.0);
+    // Ensure significant displacement from current position so it always leaps far away
+    let newX = 0;
+    let newY = 0;
+    let attempts = 0;
+    do {
+      const signX = Math.random() > 0.5 ? 1 : -1;
+      const signY = Math.random() > 0.5 ? 1 : -1;
+      newX = signX * (65 + Math.random() * (maxX - 65));
+      newY = signY * (40 + Math.random() * (maxY - 40));
+      attempts++;
+    } while (Math.hypot(newX - noPosition.x, newY - noPosition.y) < 85 && attempts < 12);
 
-    // Random directions with guaranteed minimum displacement
-    const signX = (currentAttempt % 2 === 0 ? 1 : -1) * (Math.random() > 0.3 ? 1 : -1);
-    const signY = (currentAttempt % 3 === 0 ? 1 : -1) * (Math.random() > 0.3 ? 1 : -1);
-
-    const rawX = signX * (55 + Math.random() * (maxX - 55)) * distanceFactor;
-    const rawY = signY * (35 + Math.random() * (maxY - 35)) * distanceFactor;
-
-    // Clamp inside safe screen bounds so button never leaves screen
-    const clampedX = Math.max(-maxX, Math.min(maxX, rawX));
-    const clampedY = Math.max(-maxY, Math.min(maxY, rawY));
+    const clampedX = Math.max(-maxX, Math.min(maxX, newX));
+    const clampedY = Math.max(-maxY, Math.min(maxY, newY));
 
     setNoPosition({ x: clampedX, y: clampedY });
-    setNoAttempts(currentAttempt);
+    setNoRotation((Math.random() - 0.5) * 28);
+    setNoAttempts((prev) => prev + 1);
   };
 
   const handleYesClick = () => {
@@ -145,18 +150,20 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
             </span>
           </motion.button>
 
-          {/* Option 2: Playful Runaway Nakhre Button (Untouchable & Evades touch/click) */}
+          {/* Option 2: Playful Runaway Nakhre Button (Untouchable & Evades touch/click/hover) */}
           <motion.button
-            animate={{ x: noPosition.x, y: noPosition.y }}
-            transition={{ type: "spring", stiffness: 450, damping: 18 }}
+            animate={{ x: noPosition.x, y: noPosition.y, rotate: noRotation }}
+            transition={{ type: "spring", stiffness: 500, damping: 20 }}
+            onPointerEnter={evadeNoButton}
             onMouseEnter={evadeNoButton}
-            onClick={evadeNoButton}
+            onMouseMove={evadeNoButton}
             onTouchStart={evadeNoButton}
-            className="relative inline-flex items-center justify-center gap-1.5 px-6 py-3.5 rounded-full bg-white/95 hover:bg-pink-50 border border-pink-200/90 text-xs sm:text-sm font-sans font-semibold text-[#8A6875] hover:text-[#E91E63] shadow-md transition-colors cursor-pointer select-none whitespace-nowrap z-20"
+            onPointerDown={evadeNoButton}
+            onClick={evadeNoButton}
+            className="relative inline-flex items-center justify-center gap-1.5 px-6 py-3.5 rounded-full bg-white/95 hover:bg-pink-50 border-2 border-pink-200 text-xs sm:text-sm font-sans font-bold text-[#8A6875] hover:text-[#E91E63] shadow-md hover:shadow-lg transition-colors cursor-pointer select-none whitespace-nowrap z-20 will-change-transform"
           >
-            <span>{playfulPhrases[Math.min(noAttempts, playfulPhrases.length - 1)]}</span>
+            <span>{playfulPhrases[noAttempts % playfulPhrases.length]}</span>
           </motion.button>
-
         </div>
 
         {/* Sweet Helper Text */}

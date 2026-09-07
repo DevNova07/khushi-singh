@@ -131,6 +131,30 @@ class RomanticSoundEngine {
     });
   }
 
+  // Funny cartoon boing/spring sound for runaway button
+  public playBoing() {
+    this.initContext();
+    if (!this.ctx || !this.masterGain) return;
+    const now = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(180, now);
+    osc.frequency.exponentialRampToValueAtTime(700, now + 0.16);
+    osc.frequency.exponentialRampToValueAtTime(260, now + 0.28);
+    osc.frequency.exponentialRampToValueAtTime(620, now + 0.38);
+
+    gain.gain.setValueAtTime(0.35, now);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+
+    osc.connect(gain);
+    gain.connect(this.masterGain);
+
+    osc.start(now);
+    osc.stop(now + 0.4);
+  }
+
   // Soft pop sound effect for interactive buttons/candles
   public playPop() {
     this.initContext();
