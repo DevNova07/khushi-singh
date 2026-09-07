@@ -1,10 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Heart, Crown, Sparkles, MessageCircle } from 'lucide-react';
+import { Heart, Crown, Sparkles } from 'lucide-react';
 import { romanticAudio } from '../audio/romanticSynth';
 import { GiftBoxReveal } from './GiftBoxReveal';
-import { BirthdayPromises } from './BirthdayPromises';
-import { LoveCoupons } from './LoveCoupons';
 
 interface FinalRevealProps {
   onHeartFound?: (id: number) => void;
@@ -15,10 +13,6 @@ interface FinalRevealProps {
 export const FinalReveal: React.FC<FinalRevealProps> = ({ onHeartFound, foundHearts = [], onReplay }) => {
   const secretHeartId = 5;
   const isHeartFound = foundHearts.includes(secretHeartId);
-
-  const whatsappMessage = encodeURIComponent(
-    "Hey Ramzan! ❤️ Aapka ye birthday surprise sach me bohot hi khoobsurat, emotional aur pyara tha! Mujhe har ek photo, letter, aur coupons bohot pasand aaye! Thank you so much for loving me like this! 🥰🎂✨"
-  );
 
   return (
     <section id="chapter-11" className="relative w-full pt-1 sm:pt-3 pb-8 px-2 sm:px-4 lg:px-6 overflow-hidden bg-gradient-to-b from-[#FFF9FB] via-[#FCE7EF]/60 to-[#FFFFFF]">
@@ -75,12 +69,6 @@ export const FinalReveal: React.FC<FinalRevealProps> = ({ onHeartFound, foundHea
 
         {/* Feature 1: Secret 3D Gift Box Reveal with 'Best Girlfriend' Award */}
         <GiftBoxReveal />
-
-        {/* Feature 2: 5 Sacred Birthday Promises */}
-        <BirthdayPromises />
-
-        {/* Feature 3: Khushi's Birthday Love Coupons */}
-        <LoveCoupons />
 
         {/* Emotional Ending Typography */}
         <div className="space-y-8 max-w-2xl mx-auto">
@@ -142,30 +130,6 @@ export const FinalReveal: React.FC<FinalRevealProps> = ({ onHeartFound, foundHea
 
             <div className="pt-2 flex items-center justify-center gap-2 text-[#E91E63] animate-heartbeat">
               <Heart className="w-6 h-6 fill-current" />
-            </div>
-
-            {/* Feature 4: Direct WhatsApp Reaction Card */}
-            <div className="w-full max-w-md mx-auto my-6 p-5 rounded-3xl bg-gradient-to-br from-green-500/15 via-pink-50 to-amber-50/40 border-2 border-green-500/30 shadow-xl text-center">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-green-100 text-green-800 font-mono text-[11px] font-bold uppercase tracking-wider mb-2">
-                <MessageCircle className="w-3.5 h-3.5" />
-                <span>Instant Birthday Reply</span>
-              </div>
-              <h4 className="font-serif-luxury font-bold text-lg sm:text-xl text-[#291820]">
-                Khushi, Kaisa Laga Mera Surprise? 🥹❤️
-              </h4>
-              <p className="text-xs font-serif-luxury text-[#8A6875] italic mt-1 mb-4">
-                "Bas ek tap karke mujhe WhatsApp par batao!"
-              </p>
-
-              <a
-                href={`https://wa.me/917392099587?text=${whatsappMessage}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full inline-flex items-center justify-center gap-2 py-3 px-6 rounded-2xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-sans font-bold text-sm sm:text-base shadow-lg hover:shadow-xl active:scale-95 transition-all cursor-pointer"
-              >
-                <MessageCircle className="w-5 h-5 fill-white" />
-                <span>Mujhe WhatsApp Par Batao 💬❤️</span>
-              </a>
             </div>
 
             {/* Final Actions */}
