@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Sparkles, Heart } from 'lucide-react';
 import { romanticAudio } from '../audio/romanticSynth';
 import { triggerCelebrationConfetti } from '../utils/confetti';
@@ -21,31 +21,53 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
   buttonText,
   onAnswer
 }) => {
-  const [teaseMessage, setTeaseMessage] = useState<string | null>(null);
   const [noPosition, setNoPosition] = useState({ x: 0, y: 0 });
+  const [noAttempts, setNoAttempts] = useState(0);
+
+  const playfulPhrases = [
+    "Nahi dekhna 🙈",
+    "Pakad ke dikhao! 😜",
+    "Haha miss ho gaya! 😂",
+    "Koshish bekar hai 😝",
+    "Main nahi rukne wala! 🏃‍♂️💨",
+    "Maan jao na meri Khushi! 🥹❤️",
+    "Ab toh YES hi dabana padega! 💖",
+    "Haan dabao na please! 🥰"
+  ];
+
+  const evadeNoButton = (e: React.MouseEvent | React.TouchEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    romanticAudio.playPop();
+
+    // Mobile vs Desktop boundaries
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
+    const maxX = isMobile ? 115 : 200;
+    const maxY = isMobile ? 85 : 125;
+
+    // Alternate quadrants with increasing distance
+    const currentAttempt = noAttempts + 1;
+    const distanceFactor = Math.min(1 + currentAttempt * 0.2, 2.0);
+
+    // Random directions with guaranteed minimum displacement
+    const signX = (currentAttempt % 2 === 0 ? 1 : -1) * (Math.random() > 0.3 ? 1 : -1);
+    const signY = (currentAttempt % 3 === 0 ? 1 : -1) * (Math.random() > 0.3 ? 1 : -1);
+
+    const rawX = signX * (55 + Math.random() * (maxX - 55)) * distanceFactor;
+    const rawY = signY * (35 + Math.random() * (maxY - 35)) * distanceFactor;
+
+    // Clamp inside safe screen bounds so button never leaves screen
+    const clampedX = Math.max(-maxX, Math.min(maxX, rawX));
+    const clampedY = Math.max(-maxY, Math.min(maxY, rawY));
+
+    setNoPosition({ x: clampedX, y: clampedY });
+    setNoAttempts(currentAttempt);
+  };
 
   const handleYesClick = () => {
     romanticAudio.playCelebrationChime();
     triggerCelebrationConfetti();
     onAnswer();
-  };
-
-  const handleNoClick = () => {
-    romanticAudio.playPop();
-    setTeaseMessage("Aise kaise nahi? Meri princess ko toh dekhna hi padega! 😜❤️");
-    triggerCelebrationConfetti();
-    setTimeout(() => {
-      onAnswer();
-    }, 1500);
-  };
-
-  const handleNoHover = () => {
-    if (window.innerWidth >= 768) {
-      const x = (Math.random() - 0.5) * 80;
-      const y = (Math.random() - 0.5) * 40;
-      setNoPosition({ x, y });
-      romanticAudio.playPop();
-    }
   };
 
   // Clean button text so emojis never duplicate or wrap awkwardly
@@ -92,15 +114,15 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
           </p>
         )}
 
-        {/* Two Options: Option 1 (YES) + Option 2 (Playful NO / Nakhre) */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-3.5 pt-1">
+        {/* Two Options: Option 1 (YES) + Option 2 (Playful Untouchable Runaway Nakhre Button) */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 pt-2">
           
           {/* Option 1: Main Romantic Yes Button */}
           <motion.button
             whileHover={{ scale: 1.04, y: -2 }}
             whileTap={{ scale: 0.96 }}
             onClick={handleYesClick}
-            className="cute-romantic-btn group relative inline-flex items-center justify-center flex-nowrap gap-2 sm:gap-2.5 px-6 sm:px-8 py-3.5 sm:py-3.5 rounded-full text-white font-sans font-bold text-sm sm:text-base cursor-pointer overflow-hidden shadow-2xl w-full sm:w-auto"
+            className="cute-romantic-btn group relative inline-flex items-center justify-center flex-nowrap gap-2 sm:gap-2.5 px-7 sm:px-9 py-3.5 sm:py-4 rounded-full text-white font-sans font-bold text-sm sm:text-base cursor-pointer overflow-hidden shadow-2xl w-full sm:w-auto z-10"
           >
             {/* Ambient Shimmer Sweep */}
             <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/40 to-transparent pointer-events-none" />
@@ -123,34 +145,19 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
             </span>
           </motion.button>
 
-          {/* Option 2: Playful Nakhre Button */}
+          {/* Option 2: Playful Runaway Nakhre Button (Untouchable & Evades touch/click) */}
           <motion.button
             animate={{ x: noPosition.x, y: noPosition.y }}
-            transition={{ type: "spring", stiffness: 350, damping: 20 }}
-            onMouseEnter={handleNoHover}
-            whileTap={{ scale: 0.94 }}
-            onClick={handleNoClick}
-            className="inline-flex items-center justify-center gap-1.5 px-5 py-3 sm:py-3.5 rounded-full bg-white/95 hover:bg-pink-50 border border-pink-200/90 text-xs sm:text-sm font-sans font-semibold text-[#8A6875] hover:text-[#E91E63] transition-colors cursor-pointer shadow-sm hover:shadow w-full sm:w-auto"
+            transition={{ type: "spring", stiffness: 450, damping: 18 }}
+            onMouseEnter={evadeNoButton}
+            onClick={evadeNoButton}
+            onTouchStart={evadeNoButton}
+            className="relative inline-flex items-center justify-center gap-1.5 px-6 py-3.5 rounded-full bg-white/95 hover:bg-pink-50 border border-pink-200/90 text-xs sm:text-sm font-sans font-semibold text-[#8A6875] hover:text-[#E91E63] shadow-md transition-colors cursor-pointer select-none whitespace-nowrap z-20"
           >
-            <span>Nahi dekhna</span>
-            <span className="text-sm">🙈</span>
+            <span>{playfulPhrases[Math.min(noAttempts, playfulPhrases.length - 1)]}</span>
           </motion.button>
 
         </div>
-
-        {/* Playful Nakhre Toast Message */}
-        <AnimatePresence>
-          {teaseMessage && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.85, y: 10 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.85 }}
-              className="mt-4 px-4 py-2.5 rounded-2xl bg-gradient-to-r from-[#E91E63] to-[#C2185B] text-white text-xs sm:text-sm font-serif-luxury font-medium shadow-xl inline-flex items-center gap-1.5 animate-bounce"
-            >
-              <span>{teaseMessage}</span>
-            </motion.div>
-          )}
-        </AnimatePresence>
 
         {/* Sweet Helper Text */}
         <p className="text-[11px] text-[#8A6875]/70 font-mono mt-3.5 tracking-wider uppercase">
