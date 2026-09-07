@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Heart, Sparkles, AlertCircle } from 'lucide-react';
 import { romanticAudio } from '../audio/romanticSynth';
@@ -10,10 +11,15 @@ interface InteractiveQuestionProps {
 
 export const InteractiveQuestion: React.FC<InteractiveQuestionProps> = ({ onContinue }) => {
   const [noAttempts, setNoAttempts] = useState(0);
-  const [noPosition, setNoPosition] = useState({ x: 0, y: 0 });
+  const [portalPos, setPortalPos] = useState<{ x: number; y: number } | null>(null);
+  const [noRotation, setNoRotation] = useState(0);
+  const [puffs, setPuffs] = useState<{ id: number; x: number; y: number; emoji: string }[]>([]);
   const [isYesClicked, setIsYesClicked] = useState(false);
   const [isNoFinalClicked, setIsNoFinalClicked] = useState(false);
+
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const yesButtonRef = useRef<HTMLButtonElement | null>(null);
+  const initialNoBtnRef = useRef<HTMLButtonElement | null>(null);
 
   const playfulMessages = [
     "NO 🙈",                                     // 0 (Initial)
@@ -22,7 +28,7 @@ export const InteractiveQuestion: React.FC<InteractiveQuestionProps> = ({ onCont
     "Miss ho gaya na! 😝 (3/20)",                // 3
     "Speed badhao thodi! 🏃‍♂️💨 (4/20)",           // 4
     "Koshish achhi thi par fail! 😜 (5/20)",     // 5
-    "Main idhar aa gaya! 👋🤪 (6/20)",           // 6
+    "Main navbar ke paas aa gaya! 🚀 (6/20)",    // 6
     "Haath nahi aane wala! 🏃‍♀️💨 (7/20)",         // 7
     "Thak toh nahi gayi? 🥱 (8/20)",             // 8
     "Main hawa ka jhonka hoon! 🍃😂 (9/20)",     // 9
@@ -39,6 +45,88 @@ export const InteractiveQuestion: React.FC<InteractiveQuestionProps> = ({ onCont
     "Achha baba maan gaye! 🏳️😭❤️ (Ab Click Karlo!)" // 20
   ];
 
+  const miniBadges = [
+    "🏃‍♂️ Bhaago!",
+    "🚀 Navbar ke paas!",
+    "💨 Zoom!",
+    "😜 Pakad ke dikhao!",
+    "🤪 Yahan hoon!",
+    "😂 Miss ho gaya!",
+    "👀 Oye idhar!",
+    "⚡ Bijli jaisa tezz!",
+    "🙈 Haath nahi aunga!",
+    "🍃 Hawa ka jhonka!"
+  ];
+
+  const calculateFarAwayPosition = (currentX?: number, currentY?: number) => {
+    if (typeof window === 'undefined') return { x: 30, y: 85 };
+
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const isMobile = vw < 640;
+    const btnW = isMobile ? 220 : 260;
+    const btnH = 50;
+
+    const minX = 16;
+    const maxX = Math.max(minX, vw - btnW - 16);
+    const minY = 72; // Just below top navbar
+    const maxY = Math.max(minY + 60, vh - btnH - 35);
+
+    let yesRect: DOMRect | null = null;
+    if (yesButtonRef.current) {
+      yesRect = yesButtonRef.current.getBoundingClientRect();
+    }
+
+    const bufferX = 80;
+    const bufferY = 60;
+
+    let bestX = minX;
+    let bestY = minY;
+    let found = false;
+
+    // Up to 35 attempts to find wide, safe spot strictly away from YES button
+    for (let i = 0; i < 35; i++) {
+      // 45% bias to leap right near the navbar!
+      const jumpNearNavbar = Math.random() < 0.45;
+
+      const candidateX = minX + Math.random() * (maxX - minX);
+      const candidateY = jumpNearNavbar
+        ? minY + Math.random() * (isMobile ? 50 : 70)
+        : minY + Math.random() * (maxY - minY);
+
+      // Strict avoidance: NEVER land on top of or near YES button
+      if (yesRect) {
+        const overlapsYes =
+          candidateX + btnW >= yesRect.left - bufferX &&
+          candidateX <= yesRect.right + bufferX &&
+          candidateY + btnH >= yesRect.top - bufferY &&
+          candidateY <= yesRect.bottom + bufferY;
+        if (overlapsYes) continue;
+      }
+
+      if (currentX !== undefined && currentY !== undefined) {
+        const dist = Math.hypot(candidateX - currentX, candidateY - currentY);
+        if (dist < 120 && i < 28) continue;
+      }
+
+      bestX = candidateX;
+      bestY = candidateY;
+      found = true;
+      break;
+    }
+
+    if (!found) {
+      bestY = minY + 15;
+      if (yesRect && yesRect.left < vw / 2) {
+        bestX = maxX;
+      } else {
+        bestX = minX;
+      }
+    }
+
+    return { x: Math.round(bestX), y: Math.round(bestY) };
+  };
+
   // Move the NO button away within safe bounding box
   const evadeNoButton = (e?: React.SyntheticEvent) => {
     if (noAttempts >= 20) {
@@ -53,26 +141,32 @@ export const InteractiveQuestion: React.FC<InteractiveQuestionProps> = ({ onCont
 
     romanticAudio.playBoing(noAttempts);
 
-    // Calculate displacement clamped to container bounds
-    const isMobile = window.innerWidth < 768;
-    const maxX = isMobile ? 110 : 200;
-    const maxY = isMobile ? 80 : 130;
+    // Get current position for smoke puff
+    let oldX = portalPos?.x;
+    let oldY = portalPos?.y;
 
-    let newX = 0;
-    let newY = 0;
-    let attempts = 0;
-    do {
-      const signX = Math.random() > 0.5 ? 1 : -1;
-      const signY = Math.random() > 0.5 ? 1 : -1;
-      newX = signX * (50 + Math.random() * (maxX - 50));
-      newY = signY * (35 + Math.random() * (maxY - 35));
-      attempts++;
-    } while (Math.hypot(newX - noPosition.x, newY - noPosition.y) < 85 && attempts < 15);
+    if (oldX === undefined || oldY === undefined) {
+      const rect = initialNoBtnRef.current?.getBoundingClientRect();
+      oldX = rect ? rect.left : 50;
+      oldY = rect ? rect.top : 200;
+    }
 
-    const clampedX = Math.max(-maxX, Math.min(maxX, newX));
-    const clampedY = Math.max(-maxY, Math.min(maxY, newY));
+    // Spawn funny smoke puff
+    const puffEmojis = ['💨', '✨', '🏃‍♂️', '🤪', '👻', '⚡'];
+    const newPuff = {
+      id: Date.now() + Math.random(),
+      x: oldX,
+      y: oldY,
+      emoji: puffEmojis[Math.floor(Math.random() * puffEmojis.length)]
+    };
+    setPuffs((prev) => [...prev.slice(-3), newPuff]);
+    setTimeout(() => {
+      setPuffs((prev) => prev.filter((p) => p.id !== newPuff.id));
+    }, 850);
 
-    setNoPosition({ x: clampedX, y: clampedY });
+    const newPos = calculateFarAwayPosition(oldX, oldY);
+    setPortalPos(newPos);
+    setNoRotation((Math.random() - 0.5) * 36);
     setNoAttempts((prev) => prev + 1);
   };
 
@@ -96,7 +190,7 @@ export const InteractiveQuestion: React.FC<InteractiveQuestionProps> = ({ onCont
     if (noAttempts < 20) {
       evadeNoButton(e);
     } else {
-      // User persistently clicked NO 20 times, accept gracefully!
+      // User persistently chased NO 20 times, accept gracefully!
       e.preventDefault();
       setIsNoFinalClicked(true);
       romanticAudio.playCelebrationChime();
@@ -105,7 +199,7 @@ export const InteractiveQuestion: React.FC<InteractiveQuestionProps> = ({ onCont
   };
 
   return (
-    <section id="chapter-06" className="relative w-full pt-1 sm:pt-3 pb-6 px-2 sm:px-4 lg:px-6 overflow-hidden">
+    <section id="chapter-06" className="relative w-full pt-1 sm:pt-3 pb-6 px-2 sm:px-4 lg:px-6">
       
       {/* Background Soft Hearts & Glow */}
       <div className="absolute w-96 h-96 bg-[#FCE7EF]/60 rounded-full blur-3xl pointer-events-none" />
@@ -137,6 +231,7 @@ export const InteractiveQuestion: React.FC<InteractiveQuestionProps> = ({ onCont
                 
                 {/* YES ❤️ Button */}
                 <motion.button
+                  ref={yesButtonRef}
                   onClick={handleYesClick}
                   whileHover={{ scale: 1.06, y: -2 }}
                   whileTap={{ scale: 0.95 }}
@@ -149,32 +244,25 @@ export const InteractiveQuestion: React.FC<InteractiveQuestionProps> = ({ onCont
                   </span>
                 </motion.button>
 
-                {/* NO 🙈 Button with 20 Attempts Evasion Physics */}
-                <motion.button
-                  animate={{
-                    x: noAttempts >= 20 ? 0 : noPosition.x,
-                    y: noAttempts >= 20 ? 0 : noPosition.y,
-                    scale: noAttempts >= 20 ? [1, 1.05, 1] : 1
-                  }}
-                  transition={
-                    noAttempts >= 20
-                      ? { repeat: Infinity, duration: 1.2, ease: "easeInOut" }
-                      : { type: "spring", stiffness: 450, damping: 20 }
-                  }
-                  onPointerEnter={noAttempts < 20 ? evadeNoButton : undefined}
-                  onMouseEnter={noAttempts < 20 ? evadeNoButton : undefined}
-                  onMouseMove={noAttempts < 20 ? evadeNoButton : undefined}
-                  onTouchStart={noAttempts < 20 ? evadeNoButton : undefined}
-                  onPointerDown={noAttempts < 20 ? evadeNoButton : undefined}
-                  onClick={handleNoClick}
-                  className={`px-6 sm:px-8 py-3.5 rounded-full font-sans font-semibold text-sm sm:text-base tracking-wide shadow-md cursor-pointer select-none z-10 transition-all whitespace-nowrap will-change-transform ${
-                    noAttempts >= 20
-                      ? "bg-gradient-to-r from-pink-500 to-rose-500 text-white border-2 border-white shadow-xl glow-pink"
-                      : "bg-white/95 border-2 border-pink-200 text-[#8A6875] hover:text-[#291820] hover:border-pink-300"
-                  }`}
-                >
-                  <span>{playfulMessages[Math.min(noAttempts, playfulMessages.length - 1)]}</span>
-                </motion.button>
+                {/* NO 🙈 Button: Initial state inside card before touching */}
+                {noAttempts === 0 ? (
+                  <motion.button
+                    ref={initialNoBtnRef}
+                    whileHover={{ scale: 1.02 }}
+                    onPointerEnter={evadeNoButton}
+                    onMouseEnter={evadeNoButton}
+                    onTouchStart={evadeNoButton}
+                    onPointerDown={evadeNoButton}
+                    onClick={handleNoClick}
+                    className="px-6 sm:px-8 py-3.5 rounded-full bg-white/95 border-2 border-pink-200 text-[#8A6875] hover:text-[#291820] hover:border-pink-300 font-sans font-semibold text-sm sm:text-base tracking-wide shadow-md cursor-pointer select-none z-10 transition-all whitespace-nowrap"
+                  >
+                    <span>{playfulMessages[0]}</span>
+                  </motion.button>
+                ) : (
+                  <div className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full border border-dashed border-pink-300/80 bg-pink-50/40 text-[11px] text-[#8A6875] font-mono select-none animate-pulse">
+                    <span>💨 Button screen pe bhaag gaya!</span>
+                  </div>
+                )}
 
               </div>
 
@@ -297,6 +385,70 @@ export const InteractiveQuestion: React.FC<InteractiveQuestionProps> = ({ onCont
         </AnimatePresence>
 
       </div>
+
+      {/* PORTAL: Floating Runaway Button & Cartoon Smoke Puffs (Guaranteed never over YES button) */}
+      {typeof document !== 'undefined' && portalPos && noAttempts > 0 && !isYesClicked && !isNoFinalClicked && createPortal(
+        <>
+          {puffs.map((puff) => (
+            <motion.div
+              key={puff.id}
+              initial={{ opacity: 1, scale: 0.8, y: 0 }}
+              animate={{ opacity: 0, scale: 1.8, y: -25 }}
+              transition={{ duration: 0.7 }}
+              style={{
+                position: 'fixed',
+                left: puff.x + 35,
+                top: puff.y,
+                zIndex: 99998,
+                pointerEvents: 'none'
+              }}
+              className="text-2xl drop-shadow select-none"
+            >
+              {puff.emoji}
+            </motion.div>
+          ))}
+
+          <motion.div
+            style={{
+              position: 'fixed',
+              left: portalPos.x,
+              top: portalPos.y,
+              zIndex: 99999
+            }}
+            animate={{
+              rotate: noAttempts >= 20 ? 0 : noRotation,
+              scale: noAttempts >= 20 ? [1, 1.08, 1] : [0.85, 1.12, 1]
+            }}
+            transition={
+              noAttempts >= 20
+                ? { repeat: Infinity, duration: 1.2, ease: "easeInOut" }
+                : { type: "spring", stiffness: 480, damping: 20 }
+            }
+            className="relative"
+          >
+            <div className="absolute -top-6 left-1/2 -translate-x-1/2 px-2.5 py-0.5 rounded-full bg-gradient-to-r from-[#FF4081] to-[#E91E63] text-white text-[10px] font-bold tracking-wider uppercase shadow-md whitespace-nowrap animate-bounce flex items-center gap-1 pointer-events-none">
+              <span>{noAttempts >= 20 ? "🏳️ Haar maan li!" : miniBadges[(noAttempts - 1) % miniBadges.length]}</span>
+            </div>
+
+            <button
+              onPointerEnter={noAttempts < 20 ? evadeNoButton : undefined}
+              onMouseEnter={noAttempts < 20 ? evadeNoButton : undefined}
+              onMouseMove={noAttempts < 20 ? evadeNoButton : undefined}
+              onTouchStart={noAttempts < 20 ? evadeNoButton : undefined}
+              onPointerDown={noAttempts < 20 ? evadeNoButton : undefined}
+              onClick={handleNoClick}
+              className={`relative inline-flex items-center justify-center gap-1.5 px-6 py-3.5 rounded-full text-xs sm:text-sm font-sans font-bold shadow-2xl transition-all cursor-pointer select-none whitespace-nowrap will-change-transform ${
+                noAttempts >= 20
+                  ? "bg-gradient-to-r from-pink-500 to-rose-500 text-white border-2 border-white shadow-2xl glow-pink ring-4 ring-pink-300/60"
+                  : "bg-white/95 hover:bg-pink-50 border-2 border-pink-300 text-[#8A6875] hover:text-[#E91E63] ring-2 ring-pink-200/50"
+              }`}
+            >
+              <span>{playfulMessages[Math.min(noAttempts, playfulMessages.length - 1)]}</span>
+            </button>
+          </motion.div>
+        </>,
+        document.body
+      )}
     </section>
   );
 };
