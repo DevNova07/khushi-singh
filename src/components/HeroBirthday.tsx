@@ -102,21 +102,22 @@ export const HeroBirthday: React.FC<HeroBirthdayProps> = ({ onHeartFound, foundH
             {/* Background Ambient Glow */}
             <div className="absolute -inset-2 bg-gradient-to-tr from-[#E91E63]/25 to-[#D6A85F]/20 rounded-3xl blur-xl opacity-75 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
 
-            {/* Photo 1 Container */}
-            <PhotoInteractiveWrapper photoName="Queen Khushi">
-              <div className="relative overflow-hidden rounded-2xl aspect-[4/5] bg-pink-50">
+            {/* Photo 1 Container: Pink Saree Happy Birthday Poster */}
+            <PhotoInteractiveWrapper photoName="Princess Khushi">
+              <div className="relative overflow-hidden rounded-2xl aspect-[9/16] max-h-[580px] bg-pink-50 shadow-md">
                 <img
-                  src="/photos/photo1_hero.jpg"
-                  alt="Khushi Singh - Birthday Girl"
-                  className="w-full h-full object-cover object-top transform group-hover:scale-105 transition-transform duration-1000 ease-out"
+                  src="/photos/photo_pink_poster.jpg"
+                  alt="Khushi Singh - Happy Birthday"
+                  className="w-full h-full object-cover object-center transform group-hover:scale-102 transition-transform duration-1000 ease-out"
                   loading="eager"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none" />
 
-                {/* Photo Title Overlay */}
-                <div className="absolute bottom-4 left-4 right-4 text-center text-white">
-                  <span className="text-[11px] font-mono tracking-widest text-[#D6A85F] uppercase">Chapter 01</span>
-                  <p className="font-serif-luxury text-xl font-bold">Khushi Singh</p>
+                {/* Chapter Tag Badge */}
+                <div className="absolute top-3 left-3 z-20">
+                  <span className="text-[10px] font-mono tracking-widest px-2.5 py-1 rounded-full bg-white/85 text-[#C2185B] font-bold uppercase shadow-xs backdrop-blur-xs">
+                    Chapter 01
+                  </span>
                 </div>
 
                 {/* Secret Heart Trigger #2 */}

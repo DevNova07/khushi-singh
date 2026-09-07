@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Heart, Crown, Sparkles } from 'lucide-react';
 import { romanticAudio } from '../audio/romanticSynth';
 import { GiftBoxReveal } from './GiftBoxReveal';
+import { PhotoInteractiveWrapper } from './PhotoInteractiveWrapper';
 
 interface FinalRevealProps {
   onHeartFound?: (id: number) => void;
@@ -22,6 +23,42 @@ export const FinalReveal: React.FC<FinalRevealProps> = ({ onHeartFound, foundHea
 
       <div className="max-w-4xl mx-auto text-center z-10 space-y-6 sm:space-y-8">
         
+        {/* Grand Finale Portrait: Image 1 (Sky Blue Dress Birthday Poster) */}
+        <motion.div
+          initial={{ opacity: 0, y: 30, scale: 0.95 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
+          className="relative max-w-sm sm:max-w-md w-full mx-auto p-3.5 sm:p-4 rounded-[2.5rem] bg-gradient-to-b from-sky-50/90 via-white to-blue-50/70 border-2 border-sky-300/80 shadow-2xl glow-gold"
+        >
+          {/* Decorative Top Badge */}
+          <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-sky-500 to-blue-600 text-white font-mono text-[10px] font-bold uppercase tracking-widest shadow-md z-20 flex items-center gap-1.5 whitespace-nowrap">
+            <Sparkles className="w-3 h-3 text-[#FFE082]" />
+            <span>A SPECIAL DAY • BIRTHDAY QUEEN</span>
+          </div>
+
+          <PhotoInteractiveWrapper photoName="Birthday Queen">
+            <div className="relative overflow-hidden rounded-[2rem] aspect-[9/16] max-h-[580px] bg-sky-50 shadow-md">
+              <img
+                src="/photos/photo_blue_poster.jpg"
+                alt="Khushi Singh - A Special Day Happy Birthday"
+                className="w-full h-full object-cover object-center transform group-hover:scale-102 transition-transform duration-1000 ease-out"
+                loading="eager"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none" />
+            </div>
+          </PhotoInteractiveWrapper>
+
+          <div className="pt-3 text-center">
+            <p className="font-serif-luxury text-sm sm:text-base font-bold text-[#291820]">
+              "Same Girl • Bigger Dreams • Happier Me"
+            </p>
+            <span className="text-[10px] font-mono text-[#8A6875] tracking-widest uppercase mt-0.5 block">
+              Happy Birthday, Khushi Singh ✨
+            </span>
+          </div>
+        </motion.div>
+
         {/* Royal Crest / Birthday Emblem of Endless Love */}
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
