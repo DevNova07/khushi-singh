@@ -26,28 +26,45 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
   const [noAttempts, setNoAttempts] = useState(0);
 
   const playfulPhrases = [
-    "Nahi dekhna 🙈",
-    "Pakad ke dikhao! 😜",
-    "Haha miss ho gaya! 😂",
-    "Koshish bekar hai 😝",
-    "Main nahi rukne wala! 🏃‍♂️💨",
-    "Maan jao na meri Khushi! 🥹❤️",
-    "Pakad nahi paogi! 🏃‍♀️💨",
-    "Ab toh YES hi dabana padega! 💖",
-    "Haan dabao na please! 🥰"
+    "Nahi dekhna 🙈",                               // 0 (Initial)
+    "Pakad ke dikhao! 😜 (1/20)",                   // 1
+    "Haha itni aasani se nahi! 😂 (2/20)",          // 2
+    "Miss ho gaya na! 😝 (3/20)",                   // 3
+    "Speed badhao thodi! 🏃‍♂️💨 (4/20)",              // 4
+    "Koshish achhi thi par fail! 😜 (5/20)",        // 5
+    "Main idhar aa gaya! 👋🤪 (6/20)",              // 6
+    "Haath nahi aane wala! 🏃‍♀️💨 (7/20)",            // 7
+    "Thak toh nahi gayi? 🥱 (8/20)",                // 8
+    "Main hawa ka jhonka hoon! 🍃😂 (9/20)",        // 9
+    "Aadha safar ho gaya! 🔟 (10/20)",              // 10
+    "Maan jao na meri Khushi! 🥹❤️ (11/20)",        // 11
+    "Finger ki exercise chal rahi! 🏋️‍♀️ (12/20)",     // 12
+    "Arre re... fir se miss! 🤭 (13/20)",           // 13
+    "Bas thode aur bache hain! ⏳ (14/20)",         // 14
+    "Main pro dodger ban gaya! 😎 (15/20)",         // 15
+    "Gussa mat karo please! 🥺👉👈 (16/20)",        // 16
+    "Pakad ke dikhao abhi bhi! 🤏 (17/20)",          // 17
+    "Almost... pakad liya tha! 😱 (18/20)",          // 18
+    "Aakhri baar bhaag raha hoon! ⚡ (19/20)",       // 19
+    "Achha baba maan gaye! 🏳️😭❤️ (Ab Click Karlo!)" // 20
   ];
 
   const evadeNoButton = (e?: React.SyntheticEvent) => {
+    // Before 20 attempts, strictly refuse click and leap away!
+    if (noAttempts >= 20) {
+      return;
+    }
+
     if (e) {
       e.preventDefault();
       e.stopPropagation();
     }
-    romanticAudio.playBoing();
+    romanticAudio.playBoing(noAttempts);
 
     // Mobile vs Desktop boundaries
     const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
     const maxX = isMobile ? 120 : 220;
-    const maxY = isMobile ? 90 : 140;
+    const maxY = isMobile ? 85 : 135;
 
     // Ensure significant displacement from current position so it always leaps far away
     let newX = 0;
@@ -56,17 +73,31 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
     do {
       const signX = Math.random() > 0.5 ? 1 : -1;
       const signY = Math.random() > 0.5 ? 1 : -1;
-      newX = signX * (65 + Math.random() * (maxX - 65));
-      newY = signY * (40 + Math.random() * (maxY - 40));
+      newX = signX * (55 + Math.random() * (maxX - 55));
+      newY = signY * (35 + Math.random() * (maxY - 35));
       attempts++;
-    } while (Math.hypot(newX - noPosition.x, newY - noPosition.y) < 85 && attempts < 12);
+    } while (Math.hypot(newX - noPosition.x, newY - noPosition.y) < 85 && attempts < 15);
 
     const clampedX = Math.max(-maxX, Math.min(maxX, newX));
     const clampedY = Math.max(-maxY, Math.min(maxY, newY));
 
     setNoPosition({ x: clampedX, y: clampedY });
-    setNoRotation((Math.random() - 0.5) * 28);
+    setNoRotation((Math.random() - 0.5) * 32);
     setNoAttempts((prev) => prev + 1);
+  };
+
+  const handleNoClick = (e: React.MouseEvent) => {
+    // Strictly impossible to click before 20 attempts
+    if (noAttempts < 20) {
+      evadeNoButton(e);
+      return;
+    }
+
+    // On 20th attempt, finally surrender and celebrate!
+    e.preventDefault();
+    romanticAudio.playCelebrationChime();
+    triggerCelebrationConfetti();
+    onAnswer();
   };
 
   const handleYesClick = () => {
@@ -150,19 +181,32 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
             </span>
           </motion.button>
 
-          {/* Option 2: Playful Runaway Nakhre Button (Untouchable & Evades touch/click/hover) */}
+          {/* Option 2: Playful Runaway Nakhre Button (Untouchable & Evades until 20 attempts) */}
           <motion.button
-            animate={{ x: noPosition.x, y: noPosition.y, rotate: noRotation }}
-            transition={{ type: "spring", stiffness: 500, damping: 20 }}
-            onPointerEnter={evadeNoButton}
-            onMouseEnter={evadeNoButton}
-            onMouseMove={evadeNoButton}
-            onTouchStart={evadeNoButton}
-            onPointerDown={evadeNoButton}
-            onClick={evadeNoButton}
-            className="relative inline-flex items-center justify-center gap-1.5 px-6 py-3.5 rounded-full bg-white/95 hover:bg-pink-50 border-2 border-pink-200 text-xs sm:text-sm font-sans font-bold text-[#8A6875] hover:text-[#E91E63] shadow-md hover:shadow-lg transition-colors cursor-pointer select-none whitespace-nowrap z-20 will-change-transform"
+            animate={{ 
+              x: noAttempts >= 20 ? 0 : noPosition.x, 
+              y: noAttempts >= 20 ? 0 : noPosition.y, 
+              rotate: noAttempts >= 20 ? 0 : noRotation,
+              scale: noAttempts >= 20 ? [1, 1.05, 1] : 1
+            }}
+            transition={
+              noAttempts >= 20
+                ? { repeat: Infinity, duration: 1.2, ease: "easeInOut" }
+                : { type: "spring", stiffness: 500, damping: 20 }
+            }
+            onPointerEnter={noAttempts < 20 ? evadeNoButton : undefined}
+            onMouseEnter={noAttempts < 20 ? evadeNoButton : undefined}
+            onMouseMove={noAttempts < 20 ? evadeNoButton : undefined}
+            onTouchStart={noAttempts < 20 ? evadeNoButton : undefined}
+            onPointerDown={noAttempts < 20 ? evadeNoButton : undefined}
+            onClick={handleNoClick}
+            className={`relative inline-flex items-center justify-center gap-1.5 px-6 py-3.5 rounded-full text-xs sm:text-sm font-sans font-bold shadow-md hover:shadow-lg transition-colors cursor-pointer select-none whitespace-nowrap z-20 will-change-transform ${
+              noAttempts >= 20
+                ? "bg-gradient-to-r from-pink-500 to-rose-500 text-white border-2 border-white shadow-xl glow-pink"
+                : "bg-white/95 hover:bg-pink-50 border-2 border-pink-200 text-[#8A6875] hover:text-[#E91E63]"
+            }`}
           >
-            <span>{playfulPhrases[noAttempts % playfulPhrases.length]}</span>
+            <span>{playfulPhrases[Math.min(noAttempts, playfulPhrases.length - 1)]}</span>
           </motion.button>
         </div>
 

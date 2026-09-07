@@ -16,36 +16,63 @@ export const InteractiveQuestion: React.FC<InteractiveQuestionProps> = ({ onCont
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   const playfulMessages = [
-    "NO 🙈",
-    "Are you sure? 👀",
-    "Ek baar aur soch lo... 🥹",
-    "Khushi pleaseee 😂❤️",
-    "YES is looking better, right? 😌",
-    "Still NO? Okay, try clicking now! 😜"
+    "NO 🙈",                                     // 0 (Initial)
+    "Pakad ke dikhao! 😜 (1/20)",                // 1
+    "Haha itni aasani se nahi! 😂 (2/20)",       // 2
+    "Miss ho gaya na! 😝 (3/20)",                // 3
+    "Speed badhao thodi! 🏃‍♂️💨 (4/20)",           // 4
+    "Koshish achhi thi par fail! 😜 (5/20)",     // 5
+    "Main idhar aa gaya! 👋🤪 (6/20)",           // 6
+    "Haath nahi aane wala! 🏃‍♀️💨 (7/20)",         // 7
+    "Thak toh nahi gayi? 🥱 (8/20)",             // 8
+    "Main hawa ka jhonka hoon! 🍃😂 (9/20)",     // 9
+    "Aadha safar ho gaya! 🔟 (10/20)",           // 10
+    "Maan jao na meri Khushi! 🥹❤️ (11/20)",     // 11
+    "Finger ki exercise chal rahi! 🏋️‍♀️ (12/20)",  // 12
+    "Arre re... fir se miss! 🤭 (13/20)",        // 13
+    "Bas thode aur bache hain! ⏳ (14/20)",      // 14
+    "Main pro dodger ban gaya! 😎 (15/20)",      // 15
+    "Gussa mat karo please! 🥺👉👈 (16/20)",     // 16
+    "Pakad ke dikhao abhi bhi! 🤏 (17/20)",       // 17
+    "Almost... pakad liya tha! 😱 (18/20)",       // 18
+    "Aakhri baar bhaag raha hoon! ⚡ (19/20)",    // 19
+    "Achha baba maan gaye! 🏳️😭❤️ (Ab Click Karlo!)" // 20
   ];
 
   // Move the NO button away within safe bounding box
-  const evadeNoButton = () => {
-    if (noAttempts >= 5) {
-      // After 5 attempts, allow clicking NO
+  const evadeNoButton = (e?: React.SyntheticEvent) => {
+    if (noAttempts >= 20) {
+      // After 20 attempts, allow clicking NO
       return;
     }
 
-    romanticAudio.playPop();
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+
+    romanticAudio.playBoing(noAttempts);
 
     // Calculate displacement clamped to container bounds
     const isMobile = window.innerWidth < 768;
-    const maxX = isMobile ? 80 : 160;
-    const maxY = isMobile ? 50 : 90;
+    const maxX = isMobile ? 110 : 200;
+    const maxY = isMobile ? 80 : 130;
 
-    // Alternate directions with pseudo-random offsets
-    const signX = (noAttempts % 2 === 0 ? 1 : -1);
-    const signY = (noAttempts % 3 === 0 ? 1 : -1);
+    let newX = 0;
+    let newY = 0;
+    let attempts = 0;
+    do {
+      const signX = Math.random() > 0.5 ? 1 : -1;
+      const signY = Math.random() > 0.5 ? 1 : -1;
+      newX = signX * (50 + Math.random() * (maxX - 50));
+      newY = signY * (35 + Math.random() * (maxY - 35));
+      attempts++;
+    } while (Math.hypot(newX - noPosition.x, newY - noPosition.y) < 85 && attempts < 15);
 
-    const newX = signX * (40 + Math.random() * (maxX - 40));
-    const newY = signY * (25 + Math.random() * (maxY - 25));
+    const clampedX = Math.max(-maxX, Math.min(maxX, newX));
+    const clampedY = Math.max(-maxY, Math.min(maxY, newY));
 
-    setNoPosition({ x: newX, y: newY });
+    setNoPosition({ x: clampedX, y: clampedY });
     setNoAttempts((prev) => prev + 1);
   };
 
@@ -65,13 +92,15 @@ export const InteractiveQuestion: React.FC<InteractiveQuestionProps> = ({ onCont
     }, 4200);
   };
 
-  const handleNoClick = () => {
-    if (noAttempts < 5) {
-      evadeNoButton();
+  const handleNoClick = (e: React.MouseEvent) => {
+    if (noAttempts < 20) {
+      evadeNoButton(e);
     } else {
-      // User persistently clicked NO 5+ times, accept gracefully!
+      // User persistently clicked NO 20 times, accept gracefully!
+      e.preventDefault();
       setIsNoFinalClicked(true);
-      romanticAudio.playPop();
+      romanticAudio.playCelebrationChime();
+      triggerCelebrationConfetti();
     }
   };
 
@@ -120,22 +149,29 @@ export const InteractiveQuestion: React.FC<InteractiveQuestionProps> = ({ onCont
                   </span>
                 </motion.button>
 
-                {/* NO 🙈 Button with Evasion Physics */}
+                {/* NO 🙈 Button with 20 Attempts Evasion Physics */}
                 <motion.button
                   animate={{
-                    x: noPosition.x,
-                    y: noPosition.y,
+                    x: noAttempts >= 20 ? 0 : noPosition.x,
+                    y: noAttempts >= 20 ? 0 : noPosition.y,
+                    scale: noAttempts >= 20 ? [1, 1.05, 1] : 1
                   }}
-                  transition={{
-                    type: "spring",
-                    stiffness: 400,
-                    damping: 22
-                  }}
-                  onMouseEnter={() => {
-                    if (window.innerWidth >= 768) evadeNoButton();
-                  }}
+                  transition={
+                    noAttempts >= 20
+                      ? { repeat: Infinity, duration: 1.2, ease: "easeInOut" }
+                      : { type: "spring", stiffness: 450, damping: 20 }
+                  }
+                  onPointerEnter={noAttempts < 20 ? evadeNoButton : undefined}
+                  onMouseEnter={noAttempts < 20 ? evadeNoButton : undefined}
+                  onMouseMove={noAttempts < 20 ? evadeNoButton : undefined}
+                  onTouchStart={noAttempts < 20 ? evadeNoButton : undefined}
+                  onPointerDown={noAttempts < 20 ? evadeNoButton : undefined}
                   onClick={handleNoClick}
-                  className="px-6 sm:px-8 py-3.5 rounded-full bg-white/95 border-2 border-pink-200 text-[#8A6875] hover:text-[#291820] hover:border-pink-300 font-sans font-semibold text-sm sm:text-base tracking-wide shadow-md cursor-pointer select-none z-10 transition-all whitespace-nowrap"
+                  className={`px-6 sm:px-8 py-3.5 rounded-full font-sans font-semibold text-sm sm:text-base tracking-wide shadow-md cursor-pointer select-none z-10 transition-all whitespace-nowrap will-change-transform ${
+                    noAttempts >= 20
+                      ? "bg-gradient-to-r from-pink-500 to-rose-500 text-white border-2 border-white shadow-xl glow-pink"
+                      : "bg-white/95 border-2 border-pink-200 text-[#8A6875] hover:text-[#291820] hover:border-pink-300"
+                  }`}
                 >
                   <span>{playfulMessages[Math.min(noAttempts, playfulMessages.length - 1)]}</span>
                 </motion.button>
@@ -148,7 +184,9 @@ export const InteractiveQuestion: React.FC<InteractiveQuestionProps> = ({ onCont
                   animate={{ opacity: 1 }}
                   className="text-xs text-[#8A6875] mt-6 font-mono"
                 >
-                  Attempt {noAttempts}/5 • Try touching NO if you can! 😉
+                  {noAttempts < 20 
+                    ? `Attempt ${noAttempts}/20 • Try touching NO if you can! 😉`
+                    : "Maan gaye aapki zidd ko! 🙈❤️ Ab click kar sakte ho!"}
                 </motion.p>
               )}
             </motion.div>

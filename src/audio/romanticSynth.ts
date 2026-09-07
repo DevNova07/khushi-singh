@@ -131,19 +131,26 @@ class RomanticSoundEngine {
     });
   }
 
-  // Funny cartoon boing/spring sound for runaway button
-  public playBoing() {
+  // Funny cartoon boing/spring sound for runaway button with progressive comedic pitch
+  public playBoing(attempt: number = 0) {
     this.initContext();
     if (!this.ctx || !this.masterGain) return;
     const now = this.ctx.currentTime;
     const osc = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
 
+    // Varied comical spring frequency that gets slightly higher and funnier
+    const pitchShift = 1 + (attempt % 10) * 0.045;
+    const f1 = 180 * pitchShift;
+    const f2 = 720 * pitchShift;
+    const f3 = 260 * pitchShift;
+    const f4 = 640 * pitchShift;
+
     osc.type = 'sine';
-    osc.frequency.setValueAtTime(180, now);
-    osc.frequency.exponentialRampToValueAtTime(700, now + 0.16);
-    osc.frequency.exponentialRampToValueAtTime(260, now + 0.28);
-    osc.frequency.exponentialRampToValueAtTime(620, now + 0.38);
+    osc.frequency.setValueAtTime(f1, now);
+    osc.frequency.exponentialRampToValueAtTime(f2, now + 0.16);
+    osc.frequency.exponentialRampToValueAtTime(f3, now + 0.28);
+    osc.frequency.exponentialRampToValueAtTime(f4, now + 0.38);
 
     gain.gain.setValueAtTime(0.35, now);
     gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
