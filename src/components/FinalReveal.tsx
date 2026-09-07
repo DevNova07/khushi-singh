@@ -58,7 +58,7 @@ export const FinalReveal: React.FC<FinalRevealProps> = ({ onHeartFound, foundHea
             </div>
 
             <div className="absolute bottom-5 inset-x-0 text-center text-white px-4">
-              <span className="text-[11px] font-mono tracking-widest text-[#D6A85F] uppercase">Chapter 10 • Grand Finale</span>
+              <span className="text-[11px] font-mono tracking-widest text-[#D6A85F] uppercase">Grand Finale ✨</span>
               <p className="font-serif-luxury text-xl font-bold">Khushi Singh</p>
             </div>
           </div>

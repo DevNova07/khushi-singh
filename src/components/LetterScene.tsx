@@ -83,7 +83,6 @@ export const LetterScene: React.FC<LetterSceneProps> = ({ onHeartFound, foundHea
           viewport={{ once: true }}
           className="mb-6 sm:mb-8"
         >
-          <span className="text-xs font-mono uppercase tracking-widest text-[#E91E63]">Chapter 09 • Handwritten Words</span>
           <h2 className="text-3xl sm:text-5xl font-serif-luxury font-bold text-[#291820] mt-2">
             A Letter for Khushi
           </h2>

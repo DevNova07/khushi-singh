@@ -101,9 +101,9 @@ export const App: React.FC = () => {
       ) : (
         <div className="relative z-10 w-full min-h-screen flex flex-col">
           
-          {/* Permanent Sticky Top Header (Matches background, always pinned at top) */}
-          <header className="sticky top-0 z-40 w-full bg-[#FFF9FB]/95 backdrop-blur-md border-b border-pink-100/70 shadow-xs">
-            <div className="max-w-5xl mx-auto px-3 sm:px-4 py-1.5 flex items-center justify-between">
+          {/* Top Header (Blends seamlessly with background, no harsh navbar border) */}
+          <header className="sticky top-0 z-40 w-full bg-[#FFF9FB]/90 backdrop-blur-xs">
+            <div className="max-w-5xl mx-auto px-3 sm:px-4 py-2 flex items-center justify-between">
               {/* Back Button (Only if past chapter 1) */}
               <div className="w-24 sm:w-28">
                 {activeChapter > 1 ? (
@@ -120,12 +120,12 @@ export const App: React.FC = () => {
                 )}
               </div>
 
-              {/* Chapter Step Badge */}
-              <div className="inline-flex items-center gap-1 px-2.5 sm:px-3 py-1 rounded-full bg-white/85 border border-pink-200 text-xs font-mono text-[#E91E63] shadow-xs">
-                <span>Chapter 0{activeChapter} of 11</span>
+              {/* Number Badge (Clean 1, 2, 3, 4 without 'Chapter' text) */}
+              <div className="inline-flex items-center justify-center min-w-[28px] h-7 px-2.5 rounded-full bg-pink-100/70 border border-pink-200/50 text-xs font-mono font-bold text-[#E91E63]">
+                <span>{activeChapter}</span>
               </div>
 
-              {/* Tiny discreet Mute/Unmute toggle (Never overlaps) */}
+              {/* Tiny discreet Mute/Unmute toggle */}
               <div className="w-24 sm:w-28 flex justify-end">
                 <button
                   onClick={toggleSound}

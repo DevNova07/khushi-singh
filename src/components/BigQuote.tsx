@@ -11,21 +11,8 @@ export const BigQuote: React.FC = () => {
 
       <div className="max-w-4xl mx-auto text-center z-10 space-y-6 sm:space-y-8">
         
-        {/* Top Floating Badge */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-pill border border-[#F8D4DF] text-xs uppercase tracking-widest text-[#8A6875]"
-        >
-          <Sparkles className="w-3.5 h-3.5 text-[#D6A85F]" />
-          <span>From the bottom of my heart</span>
-          <Sparkles className="w-3.5 h-3.5 text-[#D6A85F]" />
-        </motion.div>
-
         {/* Word-by-Word Emotional Accent */}
-        <div className="space-y-6">
+        <div className="space-y-6 pt-2">
           <motion.p
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}

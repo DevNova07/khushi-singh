@@ -75,7 +75,6 @@ export const LoveCards: React.FC = () => {
           transition={{ duration: 0.8 }}
           className="text-center max-w-2xl mx-auto mb-6 sm:mb-8"
         >
-          <span className="text-xs font-mono uppercase tracking-widest text-[#E91E63]">Chapter 08 • Deep Reflections</span>
           <h2 className="text-3xl sm:text-5xl font-serif-luxury font-bold text-[#291820] mt-1.5">
             Things I Love About You
           </h2>

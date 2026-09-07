@@ -95,10 +95,6 @@ export const InteractiveQuestion: React.FC<InteractiveQuestionProps> = ({ onCont
               transition={{ duration: 0.6 }}
               className="p-8 sm:p-12 rounded-3xl glass-panel-deep shadow-2xl text-center border-2 border-[#F8D4DF] relative"
             >
-              <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full glass-pill border border-[#F8D4DF] text-xs font-mono text-[#E91E63] uppercase tracking-wider mb-6">
-                <span>Chapter 06 • A Little Question</span>
-              </div>
-
               <h3 className="text-xl sm:text-2xl font-serif-luxury text-[#8A6875] italic mb-3">
                 "Khushi, ek chhota sa sawaal hai... 👀❤️"
               </h3>

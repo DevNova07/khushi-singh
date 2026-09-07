@@ -1,28 +1,17 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Clock } from 'lucide-react';
 
 export const MemoryMoment: React.FC = () => {
   return (
     <section id="chapter-05" className="relative w-full pt-0 pb-4 px-3 sm:px-4">
       <div className="max-w-md sm:max-w-lg w-full mx-auto flex flex-col items-center text-center">
         
-        {/* Top Badge */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full glass-pill border border-[#F8D4DF] text-[11px] font-mono uppercase tracking-widest text-[#E91E63] mb-2 mt-1"
-        >
-          <Clock className="w-3 h-3 text-[#E91E63]" />
-          <span>Chapter 05 • A Moment Frozen in Time</span>
-        </motion.div>
-
         {/* Title */}
         <motion.h2
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="text-2xl sm:text-4xl md:text-5xl font-serif-luxury font-bold text-[#291820] tracking-tight mb-2"
+          className="text-2xl sm:text-4xl md:text-5xl font-serif-luxury font-bold text-[#291820] tracking-tight mb-2 mt-2"
         >
           "A moment... Another memory"
         </motion.h2>

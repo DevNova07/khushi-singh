@@ -51,7 +51,6 @@ export const CakeScene: React.FC<CakeSceneProps> = ({ onWishMade }) => {
           viewport={{ once: true }}
           className="space-y-2"
         >
-          <span className="text-xs font-mono uppercase tracking-widest text-[#E91E63]">Chapter 10 • Birthday Tradition</span>
           <h2 className="text-3xl sm:text-5xl md:text-6xl font-serif-luxury font-bold text-[#291820] tracking-tight">
             Make a Wish, Khushi 🎂
           </h2>
