@@ -35,7 +35,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
   const emoji = hasEmojiMatch ? hasEmojiMatch[0] : '❤️';
 
   return (
-    <div className="w-full pt-6 sm:pt-8 pb-12 sm:pb-16 px-3 sm:px-4 flex justify-center">
+    <div id="question-section" className="w-full pt-6 sm:pt-8 pb-12 sm:pb-16 px-3 sm:px-4 flex justify-center scroll-mt-14">
       <motion.div
         initial={{ opacity: 0, scale: 0.96, y: 20 }}
         whileInView={{ opacity: 1, scale: 1, y: 0 }}

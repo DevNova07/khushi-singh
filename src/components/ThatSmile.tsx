@@ -1,7 +1,17 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { ChevronDown } from 'lucide-react';
 
 export const ThatSmile: React.FC = () => {
+  const scrollToNext = () => {
+    const questionCard = document.getElementById('question-section');
+    if (questionCard) {
+      questionCard.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      window.scrollBy({ top: 400, behavior: 'smooth' });
+    }
+  };
+
   return (
     <section id="chapter-02" className="relative w-full pt-0 pb-4 px-3 sm:px-4">
       <div className="max-w-md sm:max-w-lg w-full mx-auto flex flex-col items-center text-center">
@@ -25,11 +35,11 @@ export const ThatSmile: React.FC = () => {
           "The kind of smile that lights up everything around you, making every ordinary moment feel magical."
         </motion.p>
 
-        {/* Single Large Cinematic Photo Frame */}
+        {/* Single Large Cinematic Photo Frame with Royal Soft Float-Up */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.92 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
+          initial={{ opacity: 0, y: 40, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 1.1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
           className="relative group p-3 sm:p-4 rounded-3xl glass-panel-deep shadow-2xl glow-pink w-full mx-auto"
         >
           <div className="relative aspect-[4/5] rounded-2xl overflow-hidden bg-pink-50">
@@ -47,11 +57,25 @@ export const ThatSmile: React.FC = () => {
           </div>
         </motion.div>
 
+        {/* Floating Scroll Indicator Button (Guides user directly to surprise below) */}
+        <motion.button
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6, duration: 0.5 }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={scrollToNext}
+          className="mt-4 inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/95 border border-pink-200/80 text-xs sm:text-sm font-serif-luxury font-medium text-[#C2185B] shadow-sm hover:shadow-md hover:border-pink-300 transition-all cursor-pointer"
+        >
+          <span>Aage padho... 💌</span>
+          <ChevronDown className="w-4 h-4 text-[#E91E63] animate-bounce" />
+        </motion.button>
+
         {/* Bottom Thought Card */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
+          transition={{ delay: 0.7 }}
           className="mt-6 p-5 rounded-2xl glass-panel border border-[#F8D4DF] w-full text-center shadow-xs"
         >
           <p className="text-xs sm:text-sm font-serif-luxury italic text-[#8A6875]">

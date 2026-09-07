@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Crown, Heart, Sparkles } from 'lucide-react';
+import { Crown, Heart, Sparkles, ChevronDown } from 'lucide-react';
 import { romanticAudio } from '../audio/romanticSynth';
 
 interface HeroBirthdayProps {
@@ -83,11 +83,11 @@ export const HeroBirthday: React.FC<HeroBirthdayProps> = ({ onHeartFound, foundH
 
         {/* Right Column: Hero Photo Frame with 3D Depth */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.92 }}
-          whileInView={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 0, y: 40, scale: 0.95 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-          className="lg:col-span-5 flex justify-center perspective-1000 z-20"
+          className="lg:col-span-5 flex flex-col items-center justify-center perspective-1000 z-20"
         >
           <div
             onMouseMove={handleMouseMove}
@@ -109,15 +109,16 @@ export const HeroBirthday: React.FC<HeroBirthdayProps> = ({ onHeartFound, foundH
                 className="w-full h-full object-cover object-top transform group-hover:scale-105 transition-transform duration-1000 ease-out"
                 loading="eager"
               />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80" />
 
-              {/* Glass Frame Bottom Overlay */}
-              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent p-5 text-white flex items-end justify-between">
-                <div>
-                  <p className="text-xs tracking-widest text-[#FCE7EF] uppercase font-mono">Hero Chapter 01</p>
-                  <p className="font-serif-luxury text-xl font-semibold">Khushi Singh</p>
-                </div>
-                
-                {/* Secret Easter Egg Heart #2 */}
+              {/* Photo Title Overlay */}
+              <div className="absolute bottom-4 left-4 right-4 text-center text-white">
+                <span className="text-[11px] font-mono tracking-widest text-[#D6A85F] uppercase">Chapter 01</span>
+                <p className="font-serif-luxury text-xl font-bold">Khushi Singh</p>
+              </div>
+
+              {/* Secret Heart Trigger #2 */}
+              <div className="absolute top-4 right-4 z-20">
                 <button
                   onClick={() => {
                     if (!isHeartFound && onHeartFound) {
@@ -128,9 +129,7 @@ export const HeroBirthday: React.FC<HeroBirthdayProps> = ({ onHeartFound, foundH
                   title="Find hidden hearts"
                   aria-label="Secret Heart 2"
                   className={`p-2 rounded-full backdrop-blur-md transition-all duration-300 cursor-pointer ${
-                    isHeartFound
-                      ? 'bg-[#E91E63] text-white'
-                      : 'bg-white/30 hover:bg-white/60 text-white/90 hover:scale-110'
+                    isHeartFound ? 'bg-[#E91E63] text-white' : 'bg-black/30 hover:bg-black/50 text-white/80'
                   }`}
                 >
                   <Heart className={`w-4 h-4 ${isHeartFound ? 'fill-white' : ''}`} />
@@ -142,6 +141,27 @@ export const HeroBirthday: React.FC<HeroBirthdayProps> = ({ onHeartFound, foundH
             <div className="absolute -top-1.5 -left-1.5 w-6 h-6 border-t-2 border-l-2 border-[#D6A85F] rounded-tl-xl pointer-events-none" />
             <div className="absolute -bottom-1.5 -right-1.5 w-6 h-6 border-b-2 border-r-2 border-[#D6A85F] rounded-br-xl pointer-events-none" />
           </div>
+
+          {/* Floating Scroll Indicator Button */}
+          <motion.button
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6, duration: 0.5 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => {
+              const questionCard = document.getElementById('question-section');
+              if (questionCard) {
+                questionCard.scrollIntoView({ behavior: 'smooth' });
+              } else {
+                window.scrollBy({ top: 450, behavior: 'smooth' });
+              }
+            }}
+            className="mt-4 inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/95 border border-pink-200/80 text-xs sm:text-sm font-serif-luxury font-medium text-[#C2185B] shadow-sm hover:shadow-md hover:border-pink-300 transition-all cursor-pointer"
+          >
+            <span>Aage padho... 💌</span>
+            <ChevronDown className="w-4 h-4 text-[#E91E63] animate-bounce" />
+          </motion.button>
         </motion.div>
 
       </div>
