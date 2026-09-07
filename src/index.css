@@ -1,0 +1,188 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --bg-primary: #FFF9FB;
+    --white: #FFFFFF;
+    --soft-pink: #FCE7EF;
+    --light-pink: #F8D4DF;
+    --primary-pink: #E91E63;
+    --deep-pink: #C2185B;
+    --text-dark: #291820;
+    --text-muted: #8A6875;
+    --gold: #D6A85F;
+    --gold-light: #F7E7CE;
+  }
+
+  html {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    color: var(--text-dark);
+    background-color: var(--bg-primary);
+  }
+
+  body {
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* Custom Typography Utilities */
+.font-serif-luxury {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+}
+
+.font-display {
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+.font-script {
+  font-family: 'Alex Brush', cursive;
+}
+
+.font-body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+/* Luxury Glassmorphism & Depth Effects */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(248, 212, 223, 0.6);
+  box-shadow: 0 20px 40px -15px rgba(233, 30, 99, 0.08), 0 0 1px 1px rgba(255, 255, 255, 0.8) inset;
+}
+
+.glass-panel-deep {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(233, 30, 99, 0.15);
+  box-shadow: 0 25px 50px -12px rgba(233, 30, 99, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.9) inset;
+}
+
+.glass-button,
+.cute-romantic-btn {
+  background: linear-gradient(135deg, #FF528F 0%, #FF2670 45%, #C2185B 100%);
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 
+    0 12px 28px -6px rgba(233, 30, 99, 0.5),
+    0 0 22px rgba(255, 64, 129, 0.3),
+    inset 0 1.5px 2px rgba(255, 255, 255, 0.7),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.12);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);
+  user-select: none;
+}
+
+.glass-button:hover,
+.cute-romantic-btn:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 
+    0 16px 36px -6px rgba(233, 30, 99, 0.65),
+    0 0 32px rgba(255, 64, 129, 0.45),
+    inset 0 2px 4px rgba(255, 255, 255, 0.9);
+}
+
+.glass-button:active,
+.cute-romantic-btn:active {
+  transform: translateY(1px) scale(0.97);
+  box-shadow: 
+    0 6px 16px -4px rgba(233, 30, 99, 0.4),
+    0 0 12px rgba(255, 64, 129, 0.25);
+}
+
+.glass-pill {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(248, 212, 223, 0.8);
+  box-shadow: 0 8px 20px -6px rgba(41, 24, 32, 0.06);
+}
+
+.glow-pink {
+  box-shadow: 0 0 35px rgba(233, 30, 99, 0.25);
+}
+
+.glow-gold {
+  box-shadow: 0 0 30px rgba(214, 168, 95, 0.3);
+}
+
+.glow-text-pink {
+  text-shadow: 0 0 20px rgba(233, 30, 99, 0.35);
+}
+
+.glow-text-gold {
+  text-shadow: 0 0 20px rgba(214, 168, 95, 0.45);
+}
+
+/* Micro Animations */
+@keyframes heartPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  15% {
+    transform: scale(1.12);
+  }
+  30% {
+    transform: scale(0.98);
+  }
+  45% {
+    transform: scale(1.08);
+  }
+}
+
+.animate-heartbeat {
+  animation: heartPulse 2.4s ease-in-out infinite;
+}
+
+@keyframes floatSlow {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(3deg);
+  }
+}
+
+.animate-float {
+  animation: floatSlow 6s ease-in-out infinite;
+}
+
+@keyframes subtleShimmer {
+  0% {
+    opacity: 0.6;
+    transform: scale(0.98);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+  100% {
+    opacity: 0.6;
+    transform: scale(0.98);
+  }
+}
+
+.animate-shimmer {
+  animation: subtleShimmer 4s ease-in-out infinite;
+}
+
+/* Perspective & 3D Cards */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.transform-style-3d {
+  transform-style: preserve-3d;
+}
+
+/* Hide scrollbar while preserving scrolling */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
