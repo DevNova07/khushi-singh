@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ChevronDown, Moon } from 'lucide-react';
+import { PhotoInteractiveWrapper } from './PhotoInteractiveWrapper';
 
 export const NaturalKhushi: React.FC = () => {
   const scrollToNext = () => {
@@ -65,20 +66,23 @@ export const NaturalKhushi: React.FC = () => {
             <span>✦</span>
           </div>
 
-          <div className="relative aspect-[3.8/5] rounded-[2rem] overflow-hidden bg-slate-900 shadow-inner">
-            <img
-              src="/photos/photo8_purekhushi.jpg"
-              alt="Khushi Singh - Candid Night Smile"
-              className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-1000 ease-out"
-              loading="eager"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/75 via-transparent to-transparent" />
-            
-            <div className="absolute bottom-4 left-4 right-4 text-white text-center">
-              <span className="text-[10px] font-mono tracking-widest text-sky-300 uppercase">Late Night Candid</span>
-              <p className="font-serif-luxury text-xl font-bold">100% Real & Beautiful</p>
+          {/* Photo Frame Container */}
+          <PhotoInteractiveWrapper photoName="Natural Khushi">
+            <div className="relative aspect-[3.8/5] rounded-[2rem] overflow-hidden bg-slate-900 shadow-inner">
+              <img
+                src="/photos/photo8_purekhushi.jpg"
+                alt="Khushi Singh - Candid Night Smile"
+                className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-1000 ease-out"
+                loading="eager"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/75 via-transparent to-transparent" />
+              
+              <div className="absolute bottom-4 left-4 right-4 text-white text-center">
+                <span className="text-[10px] font-mono tracking-widest text-sky-300 uppercase">Late Night Candid</span>
+                <p className="font-serif-luxury text-xl font-bold">100% Real & Beautiful</p>
+              </div>
             </div>
-          </div>
+          </PhotoInteractiveWrapper>
         </motion.div>
 
         {/* Floating Scroll Indicator Button */}

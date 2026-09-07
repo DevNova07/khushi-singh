@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ChevronDown, Sparkles, Heart } from 'lucide-react';
+import { PhotoInteractiveWrapper } from './PhotoInteractiveWrapper';
 
 export const ThatSmile: React.FC = () => {
   const scrollToNext = () => {
@@ -60,19 +61,21 @@ export const ThatSmile: React.FC = () => {
           <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-28 h-6 bg-gradient-to-r from-amber-200/85 via-rose-200/80 to-amber-200/85 border border-amber-300/50 shadow-xs rotate-[-1.5deg] backdrop-blur-xs rounded-xs z-20 pointer-events-none" />
 
           {/* Photo Frame Container */}
-          <div className="relative aspect-[4/5] rounded-xl overflow-hidden bg-amber-50 shadow-inner">
-            <img
-              src="/photos/photo2_smile.jpg"
-              alt="Khushi Singh - That Radiant Smile"
-              className="w-full h-full object-cover object-center group-hover:scale-106 transition-transform duration-1000 ease-out"
-              loading="eager"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-60" />
-            
-            <div className="absolute top-3 right-3 px-2 py-1 rounded-full bg-black/40 backdrop-blur-md text-[10px] text-white font-mono tracking-wider">
-              MEMORIES 📸
+          <PhotoInteractiveWrapper photoName="Contagious Smile">
+            <div className="relative aspect-[4/5] rounded-xl overflow-hidden bg-amber-50 shadow-inner">
+              <img
+                src="/photos/photo2_smile.jpg"
+                alt="Khushi Singh - That Radiant Smile"
+                className="w-full h-full object-cover object-center group-hover:scale-106 transition-transform duration-1000 ease-out"
+                loading="eager"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-60" />
+              
+              <div className="absolute top-3 right-3 px-2 py-1 rounded-full bg-black/40 backdrop-blur-md text-[10px] text-white font-mono tracking-wider">
+                MEMORIES 📸
+              </div>
             </div>
-          </div>
+          </PhotoInteractiveWrapper>
 
           {/* Polaroid Bottom Caption */}
           <div className="pt-4 text-center">

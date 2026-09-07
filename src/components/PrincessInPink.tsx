@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ChevronDown, Sparkles } from 'lucide-react';
+import { PhotoInteractiveWrapper } from './PhotoInteractiveWrapper';
 
 export const PrincessInPink: React.FC = () => {
   const scrollToNext = () => {
@@ -60,20 +61,23 @@ export const PrincessInPink: React.FC = () => {
             <span>👑 PRINCESS LOOK</span>
           </div>
 
-          <div className="relative aspect-[3.8/5] rounded-[2rem] overflow-hidden bg-pink-50 shadow-inner">
-            <img
-              src="/photos/photo7_royallook.jpg"
-              alt="Khushi Singh - Princess in Pink"
-              className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-1000 ease-out"
-              loading="eager"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-pink-950/75 via-transparent to-transparent" />
-            
-            <div className="absolute bottom-4 left-4 right-4 text-white text-center">
-              <span className="text-[10px] font-mono tracking-widest text-pink-200 uppercase">Sweet Elegance</span>
-              <p className="font-serif-luxury text-xl font-bold">My Golden Princess</p>
+          {/* Photo Frame Container */}
+          <PhotoInteractiveWrapper photoName="Princess in Pink">
+            <div className="relative aspect-[3.8/5] rounded-[2rem] overflow-hidden bg-pink-50 shadow-inner">
+              <img
+                src="/photos/photo7_royallook.jpg"
+                alt="Khushi Singh - Princess in Pink"
+                className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-1000 ease-out"
+                loading="eager"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-pink-950/75 via-transparent to-transparent" />
+              
+              <div className="absolute bottom-4 left-4 right-4 text-white text-center">
+                <span className="text-[10px] font-mono tracking-widest text-pink-200 uppercase">Sweet Elegance</span>
+                <p className="font-serif-luxury text-xl font-bold">My Golden Princess</p>
+              </div>
             </div>
-          </div>
+          </PhotoInteractiveWrapper>
         </motion.div>
 
         {/* Floating Scroll Indicator Button */}

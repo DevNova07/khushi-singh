@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ChevronDown, Flame } from 'lucide-react';
+import { PhotoInteractiveWrapper } from './PhotoInteractiveWrapper';
 
 export const MemoryMoment: React.FC = () => {
   const scrollToNext = () => {
@@ -60,20 +61,22 @@ export const MemoryMoment: React.FC = () => {
             CHIC VIBES
           </div>
 
-          <div className="relative aspect-[4/5] rounded-xl overflow-hidden bg-slate-100 shadow-inner">
-            <img
-              src="/photos/photo5_balcony.jpg"
-              alt="Khushi Singh - Vibrant & Free Spirit"
-              className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-1000 ease-out"
-              loading="eager"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent" />
-            
-            <div className="absolute bottom-4 left-4 right-4 text-white text-center">
-              <span className="text-[10px] font-mono tracking-widest text-rose-300 uppercase">Urban Moments</span>
-              <p className="font-serif-luxury text-xl font-bold">Unstoppable Confidence</p>
+          <PhotoInteractiveWrapper photoName="Chic Balcony Look">
+            <div className="relative aspect-[4/5] rounded-xl overflow-hidden bg-slate-100 shadow-inner">
+              <img
+                src="/photos/photo5_balcony.jpg"
+                alt="Khushi Singh - Vibrant & Free Spirit"
+                className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-1000 ease-out"
+                loading="eager"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent" />
+              
+              <div className="absolute bottom-4 left-4 right-4 text-white text-center">
+                <span className="text-[10px] font-mono tracking-widest text-rose-300 uppercase">Urban Moments</span>
+                <p className="font-serif-luxury text-xl font-bold">Unstoppable Confidence</p>
+              </div>
             </div>
-          </div>
+          </PhotoInteractiveWrapper>
         </motion.div>
 
         {/* Floating Scroll Indicator Button */}

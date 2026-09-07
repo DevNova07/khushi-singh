@@ -216,6 +216,39 @@ class RomanticSoundEngine {
       this.playNote(f, 0.8, i * 0.08, 0.15);
     });
   }
+
+  // Celebratory royal fanfare for gift box reveal / trophy
+  public playFanfare() {
+    this.initContext();
+    if (!this.ctx) return;
+    const fanfareNotes = [523.25, 659.25, 783.99, 1046.50, 1318.51, 1567.98];
+    fanfareNotes.forEach((f, i) => {
+      this.playNote(f, 1.6, i * 0.1, 0.22);
+    });
+  }
+
+  // Stamp / seal sound effect for coupons and promises
+  public playStamp() {
+    this.initContext();
+    if (!this.ctx || !this.masterGain) return;
+    const now = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(280, now);
+    osc.frequency.exponentialRampToValueAtTime(70, now + 0.18);
+
+    gain.gain.setValueAtTime(0.35, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+
+    osc.connect(gain);
+    gain.connect(this.masterGain);
+
+    osc.start(now);
+    osc.stop(now + 0.18);
+    this.playSparkle();
+  }
 }
 
 export const romanticAudio = new RomanticSoundEngine();

@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ChevronDown, Sparkles } from 'lucide-react';
+import { PhotoInteractiveWrapper } from './PhotoInteractiveWrapper';
 
 export const LoveStory: React.FC = () => {
   const scrollToNext = () => {
@@ -59,20 +60,22 @@ export const LoveStory: React.FC = () => {
           <span className="absolute top-3 left-4 text-emerald-500/70 text-xs">🌿</span>
           <span className="absolute top-3 right-4 text-emerald-500/70 text-xs">✨</span>
 
-          <div className="relative aspect-[4/5] rounded-[2rem] overflow-hidden bg-emerald-50 shadow-inner">
-            <img
-              src="/photos/photo4_firstlook.jpg"
-              alt="Khushi Singh - Glow of Innocence"
-              className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-1000 ease-out"
-              loading="eager"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-emerald-950/70 via-transparent to-transparent" />
-            
-            <div className="absolute bottom-4 left-4 right-4 text-white text-center">
-              <span className="text-[10px] font-mono tracking-widest text-emerald-200 uppercase">First Look Memory</span>
-              <p className="font-serif-luxury text-xl font-bold">Simplicity & Grace</p>
+          <PhotoInteractiveWrapper photoName="Glow of Innocence">
+            <div className="relative aspect-[4/5] rounded-[2rem] overflow-hidden bg-emerald-50 shadow-inner">
+              <img
+                src="/photos/photo4_firstlook.jpg"
+                alt="Khushi Singh - Glow of Innocence"
+                className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-1000 ease-out"
+                loading="eager"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-emerald-950/70 via-transparent to-transparent" />
+              
+              <div className="absolute bottom-4 left-4 right-4 text-white text-center">
+                <span className="text-[10px] font-mono tracking-widest text-emerald-200 uppercase">First Look Memory</span>
+                <p className="font-serif-luxury text-xl font-bold">Simplicity & Grace</p>
+              </div>
             </div>
-          </div>
+          </PhotoInteractiveWrapper>
         </motion.div>
 
         {/* Floating Scroll Indicator Button */}

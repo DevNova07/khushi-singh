@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Crown, Heart, Sparkles, ChevronDown } from 'lucide-react';
 import { romanticAudio } from '../audio/romanticSynth';
+import { PhotoInteractiveWrapper } from './PhotoInteractiveWrapper';
 
 interface HeroBirthdayProps {
   onHeartFound?: (id: number) => void;
@@ -102,40 +103,42 @@ export const HeroBirthday: React.FC<HeroBirthdayProps> = ({ onHeartFound, foundH
             <div className="absolute -inset-2 bg-gradient-to-tr from-[#E91E63]/25 to-[#D6A85F]/20 rounded-3xl blur-xl opacity-75 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
 
             {/* Photo 1 Container */}
-            <div className="relative overflow-hidden rounded-2xl aspect-[4/5] bg-pink-50">
-              <img
-                src="/photos/photo1_hero.jpg"
-                alt="Khushi Singh - Birthday Girl"
-                className="w-full h-full object-cover object-top transform group-hover:scale-105 transition-transform duration-1000 ease-out"
-                loading="eager"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80" />
+            <PhotoInteractiveWrapper photoName="Queen Khushi">
+              <div className="relative overflow-hidden rounded-2xl aspect-[4/5] bg-pink-50">
+                <img
+                  src="/photos/photo1_hero.jpg"
+                  alt="Khushi Singh - Birthday Girl"
+                  className="w-full h-full object-cover object-top transform group-hover:scale-105 transition-transform duration-1000 ease-out"
+                  loading="eager"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80" />
 
-              {/* Photo Title Overlay */}
-              <div className="absolute bottom-4 left-4 right-4 text-center text-white">
-                <span className="text-[11px] font-mono tracking-widest text-[#D6A85F] uppercase">Chapter 01</span>
-                <p className="font-serif-luxury text-xl font-bold">Khushi Singh</p>
-              </div>
+                {/* Photo Title Overlay */}
+                <div className="absolute bottom-4 left-4 right-4 text-center text-white">
+                  <span className="text-[11px] font-mono tracking-widest text-[#D6A85F] uppercase">Chapter 01</span>
+                  <p className="font-serif-luxury text-xl font-bold">Khushi Singh</p>
+                </div>
 
-              {/* Secret Heart Trigger #2 */}
-              <div className="absolute top-4 right-4 z-20">
-                <button
-                  onClick={() => {
-                    if (!isHeartFound && onHeartFound) {
-                      romanticAudio.playSparkle();
-                      onHeartFound(secretHeartId);
-                    }
-                  }}
-                  title="Find hidden hearts"
-                  aria-label="Secret Heart 2"
-                  className={`p-2 rounded-full backdrop-blur-md transition-all duration-300 cursor-pointer ${
-                    isHeartFound ? 'bg-[#E91E63] text-white' : 'bg-black/30 hover:bg-black/50 text-white/80'
-                  }`}
-                >
-                  <Heart className={`w-4 h-4 ${isHeartFound ? 'fill-white' : ''}`} />
-                </button>
+                {/* Secret Heart Trigger #2 */}
+                <div className="absolute top-4 right-4 z-20">
+                  <button
+                    onClick={() => {
+                      if (!isHeartFound && onHeartFound) {
+                        romanticAudio.playSparkle();
+                        onHeartFound(secretHeartId);
+                      }
+                    }}
+                    title="Find hidden hearts"
+                    aria-label="Secret Heart 2"
+                    className={`p-2 rounded-full backdrop-blur-md transition-all duration-300 cursor-pointer ${
+                      isHeartFound ? 'bg-[#E91E63] text-white' : 'bg-black/30 hover:bg-black/50 text-white/80'
+                    }`}
+                  >
+                    <Heart className={`w-4 h-4 ${isHeartFound ? 'fill-white' : ''}`} />
+                  </button>
+                </div>
               </div>
-            </div>
+            </PhotoInteractiveWrapper>
 
             {/* Subtle Gold Corner Accents */}
             <div className="absolute -top-1.5 -left-1.5 w-6 h-6 border-t-2 border-l-2 border-[#D6A85F] rounded-tl-xl pointer-events-none" />

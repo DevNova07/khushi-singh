@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ChevronDown, Sparkles } from 'lucide-react';
+import { PhotoInteractiveWrapper } from './PhotoInteractiveWrapper';
 
 export const BeautifulSoul: React.FC = () => {
   const scrollToNext = () => {
@@ -59,20 +60,22 @@ export const BeautifulSoul: React.FC = () => {
           <div className="absolute inset-0 rounded-t-[120px] sm:rounded-t-[150px] rounded-b-3xl bg-gradient-to-b from-teal-100/30 via-transparent to-teal-50/20 pointer-events-none" />
 
           {/* Photo Container with Arched Top */}
-          <div className="relative aspect-[4/5] rounded-t-[110px] sm:rounded-t-[140px] rounded-b-2xl overflow-hidden bg-teal-50 shadow-md">
-            <img
-              src="/photos/photo3_lake.jpg"
-              alt="Khushi Singh - Beautiful Soul by the Lake"
-              className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-1000 ease-out"
-              loading="eager"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-teal-950/70 via-transparent to-black/20" />
+          <PhotoInteractiveWrapper photoName="Quiet Elegance">
+            <div className="relative aspect-[4/5] rounded-t-[110px] sm:rounded-t-[140px] rounded-b-2xl overflow-hidden bg-teal-50 shadow-md">
+              <img
+                src="/photos/photo3_lake.jpg"
+                alt="Khushi Singh - Beautiful Soul by the Lake"
+                className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-1000 ease-out"
+                loading="eager"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-teal-950/70 via-transparent to-black/20" />
 
-            <div className="absolute bottom-4 left-4 right-4 text-white text-center">
-              <span className="text-[10px] font-mono tracking-widest text-teal-200 uppercase">Lake Heritage</span>
-              <p className="font-serif-luxury text-xl font-bold">Quiet Elegance</p>
+              <div className="absolute bottom-4 left-4 right-4 text-white text-center">
+                <span className="text-[10px] font-mono tracking-widest text-teal-200 uppercase">Lake Heritage</span>
+                <p className="font-serif-luxury text-xl font-bold">Quiet Elegance</p>
+              </div>
             </div>
-          </div>
+          </PhotoInteractiveWrapper>
         </motion.div>
 
         {/* Floating Scroll Indicator Button */}

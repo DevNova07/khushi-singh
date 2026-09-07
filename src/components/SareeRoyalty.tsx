@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ChevronDown, Crown } from 'lucide-react';
+import { PhotoInteractiveWrapper } from './PhotoInteractiveWrapper';
 
 export const SareeRoyalty: React.FC = () => {
   const scrollToNext = () => {
@@ -62,20 +63,22 @@ export const SareeRoyalty: React.FC = () => {
           <div className="absolute bottom-2 right-2 w-5 h-5 border-b-2 border-r-2 border-amber-500 rounded-br-lg pointer-events-none" />
 
           {/* Saree Photo Container */}
-          <div className="relative aspect-[3.8/5] rounded-[2rem] overflow-hidden bg-amber-50 shadow-inner">
-            <img
-              src="/photos/photo6_saree.jpg"
-              alt="Khushi Singh in Royal Orange Saree"
-              className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-1000 ease-out"
-              loading="eager"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-amber-950/75 via-transparent to-transparent" />
-            
-            <div className="absolute bottom-4 left-4 right-4 text-white text-center">
-              <span className="text-[10px] font-mono tracking-widest text-amber-200 uppercase">Indian Heritage</span>
-              <p className="font-serif-luxury text-xl font-bold">Pure Royalty</p>
+          <PhotoInteractiveWrapper photoName="Royal Saree Look">
+            <div className="relative aspect-[3.8/5] rounded-[2rem] overflow-hidden bg-amber-50 shadow-inner">
+              <img
+                src="/photos/photo6_saree.jpg"
+                alt="Khushi Singh in Royal Orange Saree"
+                className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-1000 ease-out"
+                loading="eager"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-amber-950/75 via-transparent to-transparent" />
+              
+              <div className="absolute bottom-4 left-4 right-4 text-white text-center">
+                <span className="text-[10px] font-mono tracking-widest text-amber-200 uppercase">Indian Heritage</span>
+                <p className="font-serif-luxury text-xl font-bold">Pure Royalty</p>
+              </div>
             </div>
-          </div>
+          </PhotoInteractiveWrapper>
         </motion.div>
 
         {/* Floating Scroll Indicator Button */}
