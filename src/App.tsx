@@ -7,7 +7,9 @@ import { ThatSmile } from './components/ThatSmile';
 import { BeautifulSoul } from './components/BeautifulSoul';
 import { LoveStory } from './components/LoveStory';
 import { MemoryMoment } from './components/MemoryMoment';
-import { AnotherSmile } from './components/AnotherSmile';
+import { SareeRoyalty } from './components/SareeRoyalty';
+import { PrincessInPink } from './components/PrincessInPink';
+import { NaturalKhushi } from './components/NaturalKhushi';
 import { WhatYouMean } from './components/WhatYouMean';
 import { LoveCards } from './components/LoveCards';
 import { LetterScene } from './components/LetterScene';
@@ -212,82 +214,112 @@ export const App: React.FC = () => {
                   </div>
                 )}
 
-                {/* CHAPTER 05: A SPECIAL MOMENT (1 Image: Photo 5) */}
+                {/* CHAPTER 05: VIBRANT MOMENT (1 Image: Photo 5 - Balcony) */}
                 {activeChapter === 5 && (
                   <div className="w-full">
                     <MemoryMoment />
                     <QuestionCard
                       nextChapterNumber={6}
-                      prompt="Ek aur khoobsurat muskaan yaad hai mujhe... 🌸"
-                      question="Aapki hansi dekh kar din ban jaata hai, yaad hai?"
-                      subtitle="Another reason to remember you..."
-                      buttonText="Woh muskaan dikhao! 🌸"
+                      prompt="Modern style ke baad ek aisi tasveer jo dil chhoo le... 👑"
+                      question="Aap ready ho sabse royal aur traditional roop dekhne ke liye?"
+                      subtitle="Saree mein aapki khoobsurati ka koi muqabla nahi..."
+                      buttonText="Royal Saree Look Dikhao! 👑"
                       onAnswer={() => goToChapter(6)}
                     />
                   </div>
                 )}
 
-                {/* CHAPTER 06: ANOTHER SMILE & MEMORY (1 Image: Photo 6) */}
+                {/* CHAPTER 06: SAREE ROYALTY (1 Image: Photo 6 - Orange Saree) */}
                 {activeChapter === 6 && (
                   <div className="w-full">
-                    <AnotherSmile />
+                    <SareeRoyalty />
                     <QuestionCard
                       nextChapterNumber={7}
-                      prompt="Ab aati hai sabse emotional baat... ❤️"
-                      question="Ek baat dil se bolu aapko?"
-                      subtitle="Aap mere liye kya ho aur kya maayine rakhti ho..."
-                      buttonText="Bolo, sun rahi hoon 👂"
+                      prompt="Saree mein shaan ke baad ek fairy princess look... 🌸"
+                      question="Aapko pata hai pink color aap par kitna pyaara lagta hai?"
+                      subtitle="Jaise kisi kahani ki pari sach mein zameen par aa gayi ho..."
+                      buttonText="Princess look dikhao! 💖"
                       onAnswer={() => goToChapter(7)}
                     />
                   </div>
                 )}
 
-                {/* CHAPTER 07: WHAT YOU MEAN & SURPRISE QUESTION (0 Images) */}
+                {/* CHAPTER 07: PRINCESS IN PINK (1 Image: Photo 7 - Pink Dress & Gold Wall) */}
                 {activeChapter === 7 && (
                   <div className="w-full">
-                    <WhatYouMean onContinue={() => goToChapter(8)} />
+                    <PrincessInPink />
+                    <QuestionCard
+                      nextChapterNumber={8}
+                      prompt="Princess look ke baad meri sabse favourite natural photo... 🌙"
+                      question="Bina kisi filter ke, ekdum natural aur real Khushi dekhni hai?"
+                      subtitle="Late night candid smile jo sabse zyaada dil ke kareeb hai..."
+                      buttonText="Real Khushi dikhao! 🌌"
+                      onAnswer={() => goToChapter(8)}
+                    />
                   </div>
                 )}
 
-                {/* CHAPTER 08: 5 THINGS I LOVE ABOUT YOU (1 Image: Photo 7) */}
+                {/* CHAPTER 08: NATURAL KHUSHI (1 Image: Photo 8 - Midnight Chair Blue Tie-Dye) */}
                 {activeChapter === 8 && (
                   <div className="w-full">
-                    <LoveCards />
+                    <NaturalKhushi />
                     <QuestionCard
                       nextChapterNumber={9}
-                      prompt="Aapke liye ek bohot special cheez aayi hai... 💌"
-                      question="Aapke liye ek sealed handwritten love letter hai, padhna chahte ho?"
-                      subtitle="Isme mere dil ki har ek feeling aur baat likhi hai..."
-                      buttonText="Mera Letter Kholo 💌"
+                      prompt="Saari khoobsurat yaadon ke baad ek bohot serious dil ki baat... ❤️"
+                      question="Aap mere liye kya maayine rakhti ho, bataun?"
+                      subtitle="Kuch aisi baatein jo shayad maine pehle kabhi itne khul kar nahi kahi..."
+                      buttonText="Bolo, sun rahi hoon 👂"
                       onAnswer={() => goToChapter(9)}
                     />
                   </div>
                 )}
 
-                {/* CHAPTER 09: 3D ENVELOPE & LOVE LETTER (0 Images) */}
+                {/* CHAPTER 09: WHAT YOU MEAN & SURPRISE QUESTION (Interactive Evasion Checkpoint) */}
                 {activeChapter === 9 && (
                   <div className="w-full">
-                    <LetterScene onNext={() => goToChapter(10)} />
+                    <WhatYouMean onContinue={() => goToChapter(10)} />
                   </div>
                 )}
 
-                {/* CHAPTER 10: 3D BIRTHDAY CAKE (0 Images) */}
+                {/* CHAPTER 10: 5 THINGS I LOVE ABOUT YOU (Interactive Luxury Flip Cards) */}
                 {activeChapter === 10 && (
                   <div className="w-full">
-                    <CakeScene />
+                    <LoveCards />
                     <QuestionCard
                       nextChapterNumber={11}
-                      prompt="Candles blow karne ke baad ek aakhri baat... 👑"
-                      question="Ek aakhri aur sabse important promise... jo hamesha ke liye hai."
-                      subtitle="For my Princess Khushi... ❤️♾️"
-                      buttonText="Final Secret Surprise Dekho 👑"
+                      prompt="Aapke liye ek bohot special cheez aayi hai... 💌"
+                      question="Aapke liye ek sealed handwritten love letter hai, padhna chahte ho?"
+                      subtitle="Isme mere dil ki har ek feeling aur baat likhi hai..."
+                      buttonText="Mera Letter Kholo 💌"
                       onAnswer={() => goToChapter(11)}
                     />
                   </div>
                 )}
 
-                {/* CHAPTER 11: GRAND FINALE & SIGNATURE (1 Image: Photo 8) */}
+                {/* CHAPTER 11: 3D ENVELOPE & LOVE LETTER */}
                 {activeChapter === 11 && (
+                  <div className="w-full">
+                    <LetterScene onNext={() => goToChapter(12)} />
+                  </div>
+                )}
+
+                {/* CHAPTER 12: 3D BIRTHDAY CAKE */}
+                {activeChapter === 12 && (
+                  <div className="w-full">
+                    <CakeScene />
+                    <QuestionCard
+                      nextChapterNumber={13}
+                      prompt="Candles blow karne ke baad ek aakhri celebratory surprise... 👑"
+                      question="Ek aakhri aur sabse important promise... jo hamesha ke liye hai."
+                      subtitle="For my Princess Khushi... ❤️♾️"
+                      buttonText="Final Grand Reveal Dekho 👑"
+                      onAnswer={() => goToChapter(13)}
+                    />
+                  </div>
+                )}
+
+                {/* CHAPTER 13: GRAND FINALE & ROYAL BIRTHDAY DECREE */}
+                {activeChapter === 13 && (
                   <div className="w-full">
                     <FinalReveal onReplay={() => goToChapter(1)} />
                   </div>

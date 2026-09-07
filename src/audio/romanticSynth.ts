@@ -58,16 +58,43 @@ class RomanticSoundEngine {
     osc2.stop(now + duration);
   }
 
-  // Romantic chord progression sequence (Cmaj9 -> Am9 -> Fmaj7 -> Gsus4)
-  private romanticMelodyNotes = [
-    // Chord 1: Cmaj9 (C, G, B, E, D)
-    [261.63, 392.00, 493.88, 659.25, 587.33],
-    // Chord 2: Am9 (A, E, G, C, B)
-    [220.00, 329.63, 392.00, 523.25, 493.88],
-    // Chord 3: Fmaj7 (F, C, E, A, G)
-    [174.61, 261.63, 329.63, 440.00, 392.00],
-    // Chord 4: Gsus4 / G6 (G, D, G, B, D, E)
-    [196.00, 293.66, 392.00, 493.88, 587.33, 659.25]
+  // "Happy Birthday To You" Romantic Music Box Arrangement
+  // Frequencies in Hz:
+  // C3=130.81, F3=174.61, G3=196.00, A3=220.00, C4=261.63, D4=293.66, E4=329.63, F4=349.23
+  // G4=392.00, A4=440.00, B4=493.88, C5=523.25, D5=587.33, E5=659.25, F5=698.46, G5=783.99
+  private happyBirthdayNotes = [
+    // Phrase 1: "Happy Birthday to you..."
+    { note: 392.00, dur: 0.45, delay: 0.00, gain: 0.16 }, // Hap-
+    { note: 392.00, dur: 0.35, delay: 0.48, gain: 0.15 }, // py
+    { note: 440.00, dur: 0.75, delay: 0.88, gain: 0.18 }, // Birth-
+    { note: 392.00, dur: 0.75, delay: 1.68, gain: 0.17 }, // day
+    { note: 523.25, dur: 0.85, delay: 2.48, gain: 0.20, harmony: 261.63 }, // to
+    { note: 493.88, dur: 1.60, delay: 3.38, gain: 0.18, harmony: 196.00 }, // you...
+
+    // Phrase 2: "Happy Birthday to you..."
+    { note: 392.00, dur: 0.45, delay: 5.20, gain: 0.16 }, // Hap-
+    { note: 392.00, dur: 0.35, delay: 5.68, gain: 0.15 }, // py
+    { note: 440.00, dur: 0.75, delay: 6.08, gain: 0.18 }, // Birth-
+    { note: 392.00, dur: 0.75, delay: 6.88, gain: 0.17 }, // day
+    { note: 587.33, dur: 0.85, delay: 7.68, gain: 0.20, harmony: 196.00 }, // to
+    { note: 523.25, dur: 1.60, delay: 8.58, gain: 0.18, harmony: 261.63 }, // you...
+
+    // Phrase 3: "Happy Birthday dear Khushi..."
+    { note: 392.00, dur: 0.45, delay: 10.40, gain: 0.16 }, // Hap-
+    { note: 392.00, dur: 0.35, delay: 10.88, gain: 0.15 }, // py
+    { note: 783.99, dur: 0.85, delay: 11.28, gain: 0.22, harmony: 261.63 }, // Birth-
+    { note: 659.25, dur: 0.85, delay: 12.18, gain: 0.20, harmony: 329.63 }, // day
+    { note: 523.25, dur: 0.75, delay: 13.08, gain: 0.18, harmony: 220.00 }, // dear
+    { note: 493.88, dur: 0.75, delay: 13.88, gain: 0.17 },                 // Khu-
+    { note: 440.00, dur: 1.60, delay: 14.68, gain: 0.19, harmony: 174.61 }, // shi... ❤️
+
+    // Phrase 4: "Happy Birthday to you!"
+    { note: 698.46, dur: 0.45, delay: 16.50, gain: 0.18 }, // Hap-
+    { note: 698.46, dur: 0.35, delay: 16.98, gain: 0.17 }, // py
+    { note: 659.25, dur: 0.85, delay: 17.38, gain: 0.20, harmony: 174.61 }, // Birth-
+    { note: 523.25, dur: 0.85, delay: 18.28, gain: 0.19, harmony: 261.63 }, // day
+    { note: 587.33, dur: 0.95, delay: 19.18, gain: 0.21, harmony: 196.00 }, // to
+    { note: 523.25, dur: 2.80, delay: 20.18, gain: 0.22, harmony: 130.81 }  // you! ✨
   ];
 
   public startMusic() {
@@ -75,28 +102,25 @@ class RomanticSoundEngine {
     if (this.isPlaying) return;
     this.isPlaying = true;
 
-    let chordIndex = 0;
-    const playNextBar = () => {
+    const playFullTune = () => {
       if (!this.isPlaying || !this.ctx) return;
 
-      const chord = this.romanticMelodyNotes[chordIndex % this.romanticMelodyNotes.length];
-      chordIndex++;
+      // Play all Happy Birthday notes with exact musical timing
+      this.happyBirthdayNotes.forEach((item) => {
+        // Main melody note
+        this.playNote(item.note, item.dur * 1.8, item.delay, item.gain);
 
-      // Arpeggiate chord gently like a romantic music box
-      chord.forEach((freq, idx) => {
-        const offset = idx * 0.45;
-        this.playNote(freq, 4.0, offset, 0.14);
+        // Warm harmonic sub-note if present
+        if (item.harmony) {
+          this.playNote(item.harmony, item.dur * 2.2, item.delay + 0.02, item.gain * 0.55);
+        }
       });
 
-      // Add a delicate high-register romantic accent note
-      const accentFreq = chord[chord.length - 1] * 1.5;
-      this.playNote(accentFreq, 2.5, 2.2, 0.08);
-
-      // Repeat every 3.8 seconds
-      this.timerId = window.setTimeout(playNextBar, 3800);
+      // Loop after the full song finishes (24 seconds total cycle)
+      this.timerId = window.setTimeout(playFullTune, 24000);
     };
 
-    playNextBar();
+    playFullTune();
   }
 
   public pauseMusic() {

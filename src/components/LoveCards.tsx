@@ -84,41 +84,13 @@ export const LoveCards: React.FC = () => {
           <div className="w-16 h-0.5 bg-gradient-to-r from-transparent via-[#E91E63] to-transparent mx-auto mt-3" />
         </motion.div>
 
-        {/* Layout: Photo 7 featured alongside the 5 Interactive 3D Cards */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-center">
-          
-          {/* PHOTO 7: Ambient Editorial Photo Card */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.94 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1 }}
-            className="lg:col-span-5 flex justify-center"
-          >
-            <div className="relative group p-3 sm:p-4 rounded-3xl glass-panel-deep shadow-2xl glow-pink max-w-md sm:max-w-lg w-full mx-auto">
-              <div className="aspect-[4/5] rounded-2xl overflow-hidden relative bg-pink-50">
-                <img
-                  src="/photos/photo7_care.jpg"
-                  alt="Khushi - Endless Reasons"
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                <div className="absolute bottom-5 left-5 right-5 text-white">
-                  <span className="text-xs font-mono uppercase tracking-widest text-[#D6A85F]">Special Moments</span>
-                  <h4 className="font-serif-luxury text-xl font-bold">Endless Reasons to Cherish You</h4>
-                </div>
-              </div>
-            </div>
-          </motion.div>
+        {/* 5 Interactive Cards Grid - Perfectly Centered */}
+        <div className="max-w-3xl mx-auto space-y-4">
+          <div className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-pink-100/70 text-xs font-mono uppercase tracking-widest text-[#E91E63] justify-center animate-pulse">
+            <span>👇 TAP ANY CARD TO OPEN & DISCOVER</span>
+          </div>
 
-          {/* 5 Interactive Cards Grid */}
-          <div className="lg:col-span-7 space-y-4">
-            <div className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-pink-100/70 text-xs font-mono uppercase tracking-widest text-[#E91E63] justify-center animate-pulse">
-              <span>👇 TAP ANY CARD TO OPEN & DISCOVER</span>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
             {cardsData.map((card, idx) => {
               const Icon = card.icon;
               const isExpanded = activeCardId === card.id;
@@ -130,9 +102,9 @@ export const LoveCards: React.FC = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: idx * 0.1 }}
-                  whileHover={{ y: -6, transition: { duration: 0.25 } }}
+                  whileHover={{ y: -4, transition: { duration: 0.25 } }}
                   onClick={() => handleCardToggle(card.id)}
-                  className={`relative p-6 rounded-3xl cursor-pointer transition-all duration-300 ${
+                  className={`relative p-5 sm:p-6 rounded-3xl cursor-pointer transition-all duration-300 ${
                     idx === 4 ? 'sm:col-span-2' : ''
                   } ${
                     isExpanded
@@ -148,10 +120,10 @@ export const LoveCards: React.FC = () => {
                       <Icon className="w-5 h-5" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="font-serif-luxury text-xl font-bold text-[#291820] flex items-center justify-between">
+                      <h3 className="font-serif-luxury text-lg sm:text-xl font-bold text-[#291820] flex items-center justify-between">
                         <span>{card.title}</span>
-                        <span className="text-xs font-mono text-[#8A6875] bg-pink-50 px-2 py-0.5 rounded-full">
-                          {isExpanded ? 'TAP TO CLOSE ▲' : 'TAP TO READ ▼'}
+                        <span className="text-[10px] font-mono text-[#8A6875] bg-pink-50 px-2 py-0.5 rounded-full">
+                          {isExpanded ? 'CLOSE ▲' : 'OPEN ▼'}
                         </span>
                       </h3>
                       <p className="text-xs sm:text-sm text-[#8A6875] font-light mt-1">
@@ -165,7 +137,7 @@ export const LoveCards: React.FC = () => {
                             animate={{ opacity: 1, height: 'auto' }}
                             exit={{ opacity: 0, height: 0 }}
                             transition={{ duration: 0.3 }}
-                            className="text-sm font-serif-luxury text-[#291820] leading-relaxed mt-3 pt-3 border-t border-pink-100"
+                            className="text-xs sm:text-sm font-serif-luxury text-[#291820] leading-relaxed mt-3 pt-3 border-t border-pink-100"
                           >
                             {card.fullDesc}
                           </motion.p>
@@ -176,9 +148,7 @@ export const LoveCards: React.FC = () => {
                 </motion.div>
               );
             })}
-            </div>
           </div>
-
         </div>
 
       </div>

@@ -21,47 +21,49 @@ export const FinalReveal: React.FC<FinalRevealProps> = ({ onHeartFound, foundHea
 
       <div className="max-w-4xl mx-auto text-center z-10 space-y-6 sm:space-y-8">
         
-        {/* PHOTO 8: Cinematic Final Photo Card */}
+        {/* Royal Crest / Birthday Emblem of Endless Love */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.9, filter: 'blur(10px)' }}
-          whileInView={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+          initial={{ opacity: 0, scale: 0.9 }}
+          whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
-          className="relative group max-w-md sm:max-w-lg w-full mx-auto p-3 sm:p-4 rounded-3xl glass-panel-deep shadow-2xl glow-pink"
+          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+          className="relative max-w-md w-full mx-auto p-6 sm:p-8 rounded-[2.5rem] glass-panel-deep shadow-2xl glow-gold border-2 border-amber-200/80 text-center"
         >
-          <div className="aspect-[4/5] rounded-2xl overflow-hidden relative bg-pink-50">
-            <img
-              src="/photos/photo8_final.jpg"
-              alt="Khushi Singh - Final Portrait"
-              className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-1000 ease-out"
-              loading="lazy"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-transparent" />
-            
-            {/* Secret Easter Egg Heart #5 */}
-            <div className="absolute top-4 right-4 z-20">
-              <button
-                onClick={() => {
-                  if (!isHeartFound && onHeartFound) {
-                    romanticAudio.playSparkle();
-                    onHeartFound(secretHeartId);
-                  }
-                }}
-                title="Find hidden hearts"
-                aria-label="Secret Heart 5"
-                className={`p-2 rounded-full backdrop-blur-md transition-all duration-300 cursor-pointer ${
-                  isHeartFound ? 'bg-[#E91E63] text-white' : 'bg-black/30 hover:bg-black/50 text-white/80'
-                }`}
-              >
-                <Heart className={`w-4 h-4 ${isHeartFound ? 'fill-white' : ''}`} />
-              </button>
-            </div>
+          {/* Animated Gold Aura */}
+          <div className="absolute -inset-2 bg-gradient-to-r from-[#D6A85F]/20 via-[#FF4081]/15 to-[#D6A85F]/20 rounded-[2.5rem] blur-xl -z-10 animate-pulse pointer-events-none" />
 
-            <div className="absolute bottom-5 inset-x-0 text-center text-white px-4">
-              <span className="text-[11px] font-mono tracking-widest text-[#D6A85F] uppercase">Grand Finale ✨</span>
-              <p className="font-serif-luxury text-xl font-bold">Khushi Singh</p>
-            </div>
+          {/* Secret Easter Egg Heart #5 */}
+          <div className="absolute top-4 right-4 z-20">
+            <button
+              onClick={() => {
+                if (!isHeartFound && onHeartFound) {
+                  romanticAudio.playSparkle();
+                  onHeartFound(secretHeartId);
+                }
+              }}
+              title="Find hidden hearts"
+              aria-label="Secret Heart 5"
+              className={`p-2 rounded-full backdrop-blur-md transition-all duration-300 cursor-pointer ${
+                isHeartFound ? 'bg-[#E91E63] text-white' : 'bg-black/10 hover:bg-black/20 text-[#C2185B]'
+              }`}
+            >
+              <Heart className={`w-4 h-4 ${isHeartFound ? 'fill-current' : ''}`} />
+            </button>
           </div>
+
+          <div className="w-20 h-20 sm:w-24 sm:h-24 mx-auto mb-4 rounded-full bg-gradient-to-tr from-[#D6A85F] to-[#FFE082] flex items-center justify-center text-white shadow-xl glow-gold">
+            <Crown className="w-10 h-10 sm:w-12 sm:h-12 fill-white animate-bounce" />
+          </div>
+
+          <span className="text-xs font-mono uppercase tracking-widest text-[#D6A85F] font-bold">
+            Official Birthday Decree • 2026
+          </span>
+          <h3 className="font-serif-luxury text-2xl sm:text-3xl font-bold text-[#291820] mt-1 mb-2">
+            Princess Khushi Singh
+          </h3>
+          <p className="text-xs sm:text-sm font-serif-luxury italic text-[#8A6875] max-w-xs mx-auto">
+            "Crowned with boundless grace, unconditional kindness, and eternal love."
+          </p>
         </motion.div>
 
         {/* Emotional Ending Typography */}

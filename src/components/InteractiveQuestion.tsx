@@ -27,42 +27,48 @@ export const InteractiveQuestion: React.FC<InteractiveQuestionProps> = ({ onCont
     "Pakad ke dikhao! 😜",
     "Haha itni aasani se nahi! 😂",
     "Miss ho gaya na! 😝",
-    "Speed badhao thodi! 🏃‍♂️💨",
-    "Koshish achhi thi par fail! 😜",
     "Main navbar ke paas aa gaya! 🚀",
+    "Speed badhao thodi! 🏃‍♂️💨",
+    "Main ekdum neeche chala gaya! 👇😜",
+    "Koshish achhi thi par fail! 😜",
+    "Ab main center me hoon! 🎯😂",
     "Haath nahi aane wala! 🏃‍♀️💨",
     "Thak toh nahi gayi? 🥱",
     "Main hawa ka jhonka hoon! 🍃😂",
-    "Aadha safar paar hua! 🌈",
+    "Main fir se upar bhaag gaya! 🚀💨",
     "Maan jao na meri Khushi! 🥹❤️",
     "Finger ki exercise chal rahi! 🏋️‍♀️",
     "Arre re... fir se miss! 🤭",
-    "Bas thoda sa aur bacha hai! ⏳",
+    "Neeche dhoondo mujhe! 👇👀",
     "Main pro dodger ban gaya! 😎",
     "Gussa mat karo please! 🥺👉👈",
-    "Pakad ke dikhao abhi bhi! 🤏",
     "Almost... pakad liya tha! 😱",
-    "Aakhri baar bhaag raha hoon! ⚡",
     "Achha baba maan gaye! 🏳️😭❤️ (Ab Click Karlo!)"
   ];
 
-  const miniBadges = [
-    "🏃‍♂️ Bhaago!",
-    "🚀 Navbar ke paas!",
-    "💨 Zoom!",
-    "😜 Pakad ke dikhao!",
-    "🤪 Yahan hoon!",
-    "😂 Miss ho gaya!",
-    "👀 Oye idhar!",
-    "⚡ Bijli jaisa tezz!",
-    "🙈 Haath nahi aunga!",
-    "🍃 Hawa ka jhonka!"
-  ];
+  const getBadgeForZone = (zone: 'top' | 'bottom' | 'center', attempt: number) => {
+    if (attempt >= 20) return "🏳️ Haar maan li!";
+    if (zone === 'top') {
+      const topBadges = ["🚀 Navbar ke paas!", "☁️ Ekdum upar!", "🏃‍♂️ Upar bhaago!", "✨ Hawa me!"];
+      return topBadges[attempt % topBadges.length];
+    }
+    if (zone === 'bottom') {
+      const bottomBadges = ["👇 Ekdum neeche!", "⚓ Bottom pe hoon!", "😜 Neeche pakdo!", "💨 Zoom down!"];
+      return bottomBadges[attempt % bottomBadges.length];
+    }
+    const centerBadges = ["🎯 Center me aa gaya!", "💫 Beech me hoon!", "🤪 Yahan dhoondo!", "👀 Oye idhar!"];
+    return centerBadges[attempt % centerBadges.length];
+  };
 
-  // Guaranteed separation: Runaway button strictly locks into TOP AREA near navbar [72px, 145px]
-  // so it NEVER touches, overlaps, or comes anywhere near the pink YES button (Image 2)
-  const calculateFarAwayPosition = (currentX?: number, currentY?: number) => {
-    if (typeof window === 'undefined') return { x: 30, y: 80 };
+  const [currentZone, setCurrentZone] = useState<'top' | 'bottom' | 'center'>('top');
+
+  // Dynamic jumping across Navbar (Top), Bottom, and Center zones with 100% YES button clearance
+  const calculateFarAwayPosition = (
+    currentX?: number,
+    currentY?: number,
+    attemptNum: number = noAttempts
+  ): { x: number; y: number; zone: 'top' | 'bottom' | 'center' } => {
+    if (typeof window === 'undefined') return { x: 30, y: 80, zone: 'top' };
 
     const vw = window.innerWidth;
     const vh = window.innerHeight;
@@ -78,33 +84,70 @@ export const InteractiveQuestion: React.FC<InteractiveQuestionProps> = ({ onCont
       yesRect = yesButtonRef.current.getBoundingClientRect();
     }
 
-    const isYesInLowerHalf = !yesRect || yesRect.top >= vh * 0.42;
+    // Cycle order: Top (near navbar) -> Bottom -> Center -> Top -> Bottom -> Center...
+    const zones: ('top' | 'bottom' | 'center')[] = ['top', 'bottom', 'center'];
+    const targetZone = zones[attemptNum % zones.length];
 
-    let minY = 72; // Below top navbar
-    let maxY = 145;
+    let minY = 72;
+    let maxY = 135;
 
-    if (!isYesInLowerHalf) {
-      minY = vh - btnH - 65;
-      maxY = vh - btnH - 25;
+    if (targetZone === 'top') {
+      minY = 72; // Below top navbar
+      maxY = Math.min(140, Math.max(80, Math.round(vh * 0.18)));
+    } else if (targetZone === 'bottom') {
+      minY = Math.max(vh - btnH - 110, Math.round(vh * 0.78));
+      maxY = Math.max(minY, vh - btnH - 25);
+    } else {
+      // Center / Mid-screen zone
+      minY = Math.max(160, Math.round(vh * 0.35));
+      maxY = Math.min(Math.round(vh * 0.65), vh - 160);
+      if (minY >= maxY) {
+        minY = Math.round(vh * 0.32);
+        maxY = Math.round(vh * 0.68);
+      }
     }
 
     let bestX = minX;
     let bestY = minY;
     let found = false;
 
-    for (let i = 0; i < 30; i++) {
-      const candidateX = minX + Math.random() * (maxX - minX);
-      const candidateY = minY + Math.random() * (maxY - minY);
+    for (let i = 0; i < 40; i++) {
+      let candidateX = minX + Math.random() * (maxX - minX);
+      let candidateY = minY + Math.random() * Math.max(10, maxY - minY);
 
-      // Strict vertical clearance from YES button: MUST BE >= 220px!
+      // Strict collision avoidance with YES button (30px margin)
       if (yesRect) {
-        const vertDist = Math.abs(candidateY - yesRect.top);
-        if (vertDist < 220) continue;
+        const cushion = 30;
+        const overlapsX = candidateX < yesRect.right + cushion && (candidateX + btnW) > yesRect.left - cushion;
+        const overlapsY = candidateY < yesRect.bottom + cushion && (candidateY + btnH) > yesRect.top - cushion;
+
+        if (overlapsX && overlapsY) {
+          if (targetZone === 'center') {
+            const canLeft = yesRect.left - cushion - btnW >= minX;
+            const canRight = yesRect.right + cushion <= maxX;
+            if (canLeft && canRight) {
+              candidateX = Math.random() > 0.5 ? minX : maxX;
+            } else if (canLeft) {
+              candidateX = minX;
+            } else if (canRight) {
+              candidateX = maxX;
+            } else {
+              if (yesRect.top - cushion - btnH > 150) {
+                candidateY = yesRect.top - cushion - btnH;
+              } else {
+                candidateY = yesRect.bottom + cushion;
+              }
+            }
+          } else {
+            continue;
+          }
+        }
       }
 
+      // Leap far from previous position
       if (currentX !== undefined && currentY !== undefined) {
         const dist = Math.hypot(candidateX - currentX, candidateY - currentY);
-        if (dist < 90 && i < 24) continue;
+        if (dist < 100 && i < 30) continue;
       }
 
       bestX = candidateX;
@@ -114,11 +157,29 @@ export const InteractiveQuestion: React.FC<InteractiveQuestionProps> = ({ onCont
     }
 
     if (!found) {
-      bestY = isYesInLowerHalf ? 80 : vh - btnH - 35;
-      bestX = minX + Math.random() * (maxX - minX);
+      if (targetZone === 'top') {
+        bestY = 78;
+        bestX = minX + Math.random() * (maxX - minX);
+      } else if (targetZone === 'bottom') {
+        bestY = vh - btnH - 30;
+        bestX = minX + Math.random() * (maxX - minX);
+      } else {
+        if (yesRect && yesRect.top - btnH - 35 > 150) {
+          bestY = yesRect.top - btnH - 35;
+        } else if (yesRect) {
+          bestY = Math.min(vh - btnH - 30, yesRect.bottom + 35);
+        } else {
+          bestY = Math.round(vh * 0.5 - btnH / 2);
+        }
+        bestX = Math.random() > 0.5 ? minX : maxX;
+      }
     }
 
-    return { x: Math.round(bestX), y: Math.round(bestY) };
+    return {
+      x: Math.round(Math.max(minX, Math.min(maxX, bestX))),
+      y: Math.round(Math.max(20, Math.min(vh - btnH - 20, bestY))),
+      zone: targetZone
+    };
   };
 
   const evadeNoButton = (e?: React.SyntheticEvent) => {
@@ -154,10 +215,12 @@ export const InteractiveQuestion: React.FC<InteractiveQuestionProps> = ({ onCont
       setPuffs((prev) => prev.filter((p) => p.id !== newPuff.id));
     }, 850);
 
-    const newPos = calculateFarAwayPosition(oldX, oldY);
-    setPortalPos(newPos);
-    setNoRotation((Math.random() - 0.5) * 32);
-    setNoAttempts((prev) => prev + 1);
+    const nextAttempt = noAttempts + 1;
+    const newPos = calculateFarAwayPosition(oldX, oldY, noAttempts);
+    setPortalPos({ x: newPos.x, y: newPos.y });
+    setCurrentZone(newPos.zone);
+    setNoRotation((Math.random() - 0.5) * 28);
+    setNoAttempts(nextAttempt);
   };
 
   const handleYesClick = () => {
@@ -411,7 +474,7 @@ export const InteractiveQuestion: React.FC<InteractiveQuestionProps> = ({ onCont
             className="relative"
           >
             <div className="absolute -top-6 left-1/2 -translate-x-1/2 px-2.5 py-0.5 rounded-full bg-gradient-to-r from-[#FF4081] to-[#E91E63] text-white text-[10px] font-bold tracking-wider uppercase shadow-md whitespace-nowrap animate-bounce flex items-center gap-1 pointer-events-none">
-              <span>{noAttempts >= 20 ? "🏳️ Haar maan li!" : miniBadges[(noAttempts - 1) % miniBadges.length]}</span>
+              <span>{getBadgeForZone(currentZone, noAttempts)}</span>
             </div>
 
             <button

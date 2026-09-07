@@ -137,19 +137,19 @@ export const OpeningScene: React.FC<OpeningSceneProps> = ({ onOpen, onHeartFound
           <button
             onClick={handleOpenClick}
             disabled={isTransitioning}
-            className="cute-romantic-btn group relative inline-flex items-center justify-center flex-nowrap gap-2.5 sm:gap-3 px-8 sm:px-10 py-4 sm:py-4.5 rounded-full text-white font-sans font-bold text-base sm:text-lg cursor-pointer overflow-hidden shadow-2xl max-w-full"
+            className="cute-romantic-btn group relative inline-flex items-center justify-center flex-nowrap gap-2 sm:gap-3 px-4 sm:px-9 py-3.5 sm:py-4 rounded-full text-white font-sans font-bold text-xs sm:text-base cursor-pointer overflow-hidden shadow-2xl max-w-[94vw] sm:max-w-md w-auto"
           >
             {/* Shimmer sweep */}
             <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/40 to-transparent pointer-events-none" />
 
-            <Sparkles className="w-5 h-5 text-[#FFE57F] flex-shrink-0 animate-pulse drop-shadow" />
+            <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-[#FFE57F] flex-shrink-0 animate-pulse drop-shadow" />
 
-            <span className="whitespace-nowrap tracking-wide drop-shadow-sm font-sans font-semibold text-white">
+            <span className="whitespace-nowrap tracking-normal sm:tracking-wide drop-shadow-sm font-sans font-semibold text-white">
               {isTransitioning ? "OPENING MAGIC..." : "OPEN YOUR BIRTHDAY SURPRISE"}
             </span>
 
-            <span className="flex items-center justify-center w-7 h-7 rounded-full bg-white/25 border border-white/40 shadow-xs flex-shrink-0 backdrop-blur-xs">
-              <Heart className="w-4 h-4 fill-white text-white animate-heartbeat" />
+            <span className="flex items-center justify-center w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white/25 border border-white/40 shadow-xs flex-shrink-0 backdrop-blur-xs">
+              <Heart className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-white text-white animate-heartbeat" />
             </span>
           </button>
         </motion.div>
