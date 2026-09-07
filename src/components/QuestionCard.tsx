@@ -30,28 +30,29 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
   const yesButtonRef = useRef<HTMLButtonElement | null>(null);
   const initialNoBtnRef = useRef<HTMLButtonElement | null>(null);
 
+  // Pure funny phrases with absolutely NO numbers
   const playfulPhrases = [
-    "Nahi dekhna 🙈",                               // 0 (Initial)
-    "Pakad ke dikhao! 😜 (1/20)",                   // 1
-    "Haha itni aasani se nahi! 😂 (2/20)",          // 2
-    "Miss ho gaya na! 😝 (3/20)",                   // 3
-    "Speed badhao thodi! 🏃‍♂️💨 (4/20)",              // 4
-    "Koshish achhi thi par fail! 😜 (5/20)",        // 5
-    "Main navbar ke paas aa gaya! 🚀 (6/20)",       // 6
-    "Haath nahi aane wala! 🏃‍♀️💨 (7/20)",            // 7
-    "Thak toh nahi gayi? 🥱 (8/20)",                // 8
-    "Main hawa ka jhonka hoon! 🍃😂 (9/20)",        // 9
-    "Aadha safar ho gaya! 🔟 (10/20)",              // 10
-    "Maan jao na meri Khushi! 🥹❤️ (11/20)",        // 11
-    "Finger ki exercise chal rahi! 🏋️‍♀️ (12/20)",     // 12
-    "Arre re... fir se miss! 🤭 (13/20)",           // 13
-    "Bas thode aur bache hain! ⏳ (14/20)",         // 14
-    "Main pro dodger ban gaya! 😎 (15/20)",         // 15
-    "Gussa mat karo please! 🥺👉👈 (16/20)",        // 16
-    "Pakad ke dikhao abhi bhi! 🤏 (17/20)",          // 17
-    "Almost... pakad liya tha! 😱 (18/20)",          // 18
-    "Aakhri baar bhaag raha hoon! ⚡ (19/20)",       // 19
-    "Achha baba maan gaye! 🏳️😭❤️ (Ab Click Karlo!)" // 20
+    "Nahi dekhna 🙈",
+    "Pakad ke dikhao! 😜",
+    "Haha itni aasani se nahi! 😂",
+    "Miss ho gaya na! 😝",
+    "Speed badhao thodi! 🏃‍♂️💨",
+    "Koshish achhi thi par fail! 😜",
+    "Main navbar ke paas aa gaya! 🚀",
+    "Haath nahi aane wala! 🏃‍♀️💨",
+    "Thak toh nahi gayi? 🥱",
+    "Main hawa ka jhonka hoon! 🍃😂",
+    "Aadha safar paar hua! 🌈",
+    "Maan jao na meri Khushi! 🥹❤️",
+    "Finger ki exercise chal rahi! 🏋️‍♀️",
+    "Arre re... fir se miss! 🤭",
+    "Bas thoda sa aur bacha hai! ⏳",
+    "Main pro dodger ban gaya! 😎",
+    "Gussa mat karo please! 🥺👉👈",
+    "Pakad ke dikhao abhi bhi! 🤏",
+    "Almost... pakad liya tha! 😱",
+    "Aakhri baar bhaag raha hoon! ⚡",
+    "Achha baba maan gaye! 🏳️😭❤️ (Ab Click Karlo!)"
   ];
 
   const miniBadges = [
@@ -67,56 +68,57 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
     "🍃 Hawa ka jhonka!"
   ];
 
+  // Guaranteed separation: The runaway button is strictly locked to the TOP AREA near navbar
+  // so it NEVER touches, overlaps, or comes anywhere near the pink YES button (Image 2)
   const calculateFarAwayPosition = (currentX?: number, currentY?: number) => {
-    if (typeof window === 'undefined') return { x: 30, y: 85 };
+    if (typeof window === 'undefined') return { x: 30, y: 80 };
 
     const vw = window.innerWidth;
     const vh = window.innerHeight;
     const isMobile = vw < 640;
-    const btnW = isMobile ? 220 : 260;
-    const btnH = 50;
+    const btnW = isMobile ? 210 : 250;
+    const btnH = 46;
 
     const minX = 16;
     const maxX = Math.max(minX, vw - btnW - 16);
-    const minY = 72; // Just below the top navbar
-    const maxY = Math.max(minY + 60, vh - btnH - 35);
 
     let yesRect: DOMRect | null = null;
     if (yesButtonRef.current) {
       yesRect = yesButtonRef.current.getBoundingClientRect();
     }
 
-    const bufferX = 80;
-    const bufferY = 60;
+    // When viewing QuestionCard, YES button is in the lower half of screen (or center).
+    // Lock runaway button strictly in TOP AREA right below navbar: [72px, 145px]!
+    // This creates a guaranteed 250px - 500px vertical gap away from YES button.
+    const isYesInLowerHalf = !yesRect || yesRect.top >= vh * 0.42;
+
+    let minY = 72; // Below top navbar
+    let maxY = 145;
+
+    if (!isYesInLowerHalf) {
+      // If YES is scrolled to the very top, put runaway button at the very bottom
+      minY = vh - btnH - 65;
+      maxY = vh - btnH - 25;
+    }
 
     let bestX = minX;
     let bestY = minY;
     let found = false;
 
-    // Up to 35 attempts to find a wide, safe spot away from YES button
-    for (let i = 0; i < 35; i++) {
-      // 45% bias to jump right up near navbar
-      const jumpNearNavbar = Math.random() < 0.45;
-
+    for (let i = 0; i < 30; i++) {
       const candidateX = minX + Math.random() * (maxX - minX);
-      const candidateY = jumpNearNavbar
-        ? minY + Math.random() * (isMobile ? 50 : 70)
-        : minY + Math.random() * (maxY - minY);
+      const candidateY = minY + Math.random() * (maxY - minY);
 
-      // Strict avoidance: NEVER land on top of or near the YES button
+      // Strict vertical clearance from YES button: MUST BE >= 220px!
       if (yesRect) {
-        const overlapsYes =
-          candidateX + btnW >= yesRect.left - bufferX &&
-          candidateX <= yesRect.right + bufferX &&
-          candidateY + btnH >= yesRect.top - bufferY &&
-          candidateY <= yesRect.bottom + bufferY;
-        if (overlapsYes) continue;
+        const vertDist = Math.abs(candidateY - yesRect.top);
+        if (vertDist < 220) continue;
       }
 
-      // Ensure significant distance from previous position
+      // Leap far away from previous position
       if (currentX !== undefined && currentY !== undefined) {
         const dist = Math.hypot(candidateX - currentX, candidateY - currentY);
-        if (dist < 120 && i < 28) continue;
+        if (dist < 90 && i < 24) continue;
       }
 
       bestX = candidateX;
@@ -125,14 +127,9 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
       break;
     }
 
-    // Fallback: If no candidate found, place at top right near navbar away from YES
     if (!found) {
-      bestY = minY + 15;
-      if (yesRect && yesRect.left < vw / 2) {
-        bestX = maxX;
-      } else {
-        bestX = minX;
-      }
+      bestY = isYesInLowerHalf ? 80 : vh - btnH - 35;
+      bestX = minX + Math.random() * (maxX - minX);
     }
 
     return { x: Math.round(bestX), y: Math.round(bestY) };
@@ -161,7 +158,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
       oldY = rect ? rect.top : 200;
     }
 
-    // Spawn a funny puff effect at previous position
+    // Spawn funny smoke puff
     const puffEmojis = ['💨', '✨', '🏃‍♂️', '🤪', '👻', '⚡'];
     const newPuff = {
       id: Date.now() + Math.random(),
@@ -176,7 +173,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 
     const newPos = calculateFarAwayPosition(oldX, oldY);
     setPortalPos(newPos);
-    setNoRotation((Math.random() - 0.5) * 36);
+    setNoRotation((Math.random() - 0.5) * 32);
     setNoAttempts((prev) => prev + 1);
   };
 
@@ -304,7 +301,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
         </p>
       </motion.div>
 
-      {/* PORTAL: Floating Runaway Button & Cartoon Smoke Puffs (Guaranteed never over YES button) */}
+      {/* PORTAL: Floating Runaway Button & Cartoon Smoke Puffs (Guaranteed 220px+ away from YES button) */}
       {typeof document !== 'undefined' && portalPos && noAttempts > 0 && createPortal(
         <>
           {/* Cartoon Puffs left behind at previous positions */}
@@ -327,7 +324,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
             </motion.div>
           ))}
 
-          {/* Untouchable Runaway Button jumping across the screen */}
+          {/* Untouchable Runaway Button jumping strictly near navbar */}
           <motion.div
             style={{
               position: 'fixed',
