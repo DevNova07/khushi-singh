@@ -103,7 +103,7 @@ export const GiftBoxReveal: React.FC = () => {
               <div className="w-24 h-0.5 mx-auto bg-gradient-to-r from-transparent via-[#D6A85F] to-transparent mb-3" />
 
               <p className="text-xs sm:text-sm font-serif-luxury text-[#5D4037] leading-relaxed max-w-md mx-auto">
-                This award is officially conferred upon <span className="font-bold text-[#C2185B]">Princess Khushi Singh</span>, for having the purest heart, the most infectious smile, and bringing unlimited joy, peace, and love into Ramzan's life.
+                This award is officially conferred upon <span className="font-bold text-[#C2185B]">Princess Khushi Singh</span>, for having the purest heart, the most infectious smile, and bringing unlimited joy, peace, and love into my life.
               </p>
 
               <div className="mt-5 pt-4 border-t border-[#D6A85F]/30 flex flex-wrap items-center justify-between gap-2 text-left">
@@ -113,8 +113,8 @@ export const GiftBoxReveal: React.FC = () => {
                 </div>
 
                 <div className="text-right">
-                  <span className="text-[10px] font-mono text-[#8A6875] block">Conferred with Love by</span>
-                  <span className="font-serif-luxury text-sm font-bold text-[#E91E63]">Ramzan ❤️</span>
+                  <span className="text-[10px] font-mono text-[#8A6875] block">Conferred with Love</span>
+                  <span className="font-serif-luxury text-sm font-bold text-[#E91E63]">With All My Heart ❤️</span>
                 </div>
               </div>
             </div>
