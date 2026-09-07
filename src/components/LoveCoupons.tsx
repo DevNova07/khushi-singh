@@ -70,7 +70,7 @@ export const LoveCoupons: React.FC = () => {
     const text = encodeURIComponent(
       `Hey Ramzan! ❤️ Maine aapki website se ye birthday voucher redeem kiya hai:\n\n🎟️ *${coupon.title}*\n"${coupon.terms}"\n\nAb jaldi se mera ye voucher fulfill karo! 🥰🎂✨`
     );
-    return `https://wa.me/?text=${text}`;
+    return `https://wa.me/917392099587?text=${text}`;
   };
 
   return (

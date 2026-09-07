@@ -158,7 +158,7 @@ export const FinalReveal: React.FC<FinalRevealProps> = ({ onHeartFound, foundHea
               </p>
 
               <a
-                href={`https://wa.me/?text=${whatsappMessage}`}
+                href={`https://wa.me/917392099587?text=${whatsappMessage}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full inline-flex items-center justify-center gap-2 py-3 px-6 rounded-2xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-sans font-bold text-sm sm:text-base shadow-lg hover:shadow-xl active:scale-95 transition-all cursor-pointer"
