@@ -29,7 +29,7 @@ export const FinalReveal: React.FC<FinalRevealProps> = ({ onHeartFound, foundHea
           whileInView={{ opacity: 1, y: 0, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
-          className="relative max-w-sm sm:max-w-md w-full mx-auto p-3.5 sm:p-4 rounded-[2.5rem] bg-gradient-to-b from-sky-50/90 via-white to-blue-50/70 border-2 border-sky-300/80 shadow-2xl glow-gold"
+          className="relative max-w-[340px] sm:max-w-[370px] w-full mx-auto p-3.5 sm:p-4 rounded-[2.5rem] bg-gradient-to-b from-sky-50/90 via-white to-blue-50/70 border-2 border-sky-300/80 shadow-2xl glow-gold text-center"
         >
           {/* Decorative Top Badge */}
           <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-sky-500 to-blue-600 text-white font-mono text-[10px] font-bold uppercase tracking-widest shadow-md z-20 flex items-center gap-1.5 whitespace-nowrap">
@@ -37,8 +37,8 @@ export const FinalReveal: React.FC<FinalRevealProps> = ({ onHeartFound, foundHea
             <span>A SPECIAL DAY • BIRTHDAY QUEEN</span>
           </div>
 
-          <PhotoInteractiveWrapper photoName="Birthday Queen">
-            <div className="relative overflow-hidden rounded-[2rem] aspect-[9/16] max-h-[580px] bg-sky-50 shadow-md">
+          <PhotoInteractiveWrapper photoName="Birthday Queen" className="w-full mx-auto">
+            <div className="relative overflow-hidden rounded-[2rem] aspect-[9/16] w-full mx-auto bg-sky-50 shadow-md">
               <img
                 src="/photos/photo_blue_poster.jpg"
                 alt="Khushi Singh - A Special Day Happy Birthday"

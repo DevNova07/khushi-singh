@@ -97,14 +97,14 @@ export const HeroBirthday: React.FC<HeroBirthdayProps> = ({ onHeartFound, foundH
               transform: `rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg)`,
               transition: 'transform 0.25s cubic-bezier(0.16, 1, 0.3, 1)'
             }}
-            className="relative group p-3 sm:p-4 rounded-3xl glass-panel-deep glow-pink max-w-md sm:max-w-lg w-full mx-auto"
+            className="relative group p-3 sm:p-4 rounded-3xl glass-panel-deep glow-pink max-w-[340px] sm:max-w-[370px] w-full mx-auto text-center"
           >
             {/* Background Ambient Glow */}
             <div className="absolute -inset-2 bg-gradient-to-tr from-[#E91E63]/25 to-[#D6A85F]/20 rounded-3xl blur-xl opacity-75 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
 
             {/* Photo 1 Container: Pink Saree Happy Birthday Poster */}
-            <PhotoInteractiveWrapper photoName="Princess Khushi">
-              <div className="relative overflow-hidden rounded-2xl aspect-[9/16] max-h-[580px] bg-pink-50 shadow-md">
+            <PhotoInteractiveWrapper photoName="Princess Khushi" className="w-full mx-auto">
+              <div className="relative overflow-hidden rounded-2xl aspect-[9/16] w-full mx-auto bg-pink-50 shadow-md">
                 <img
                   src="/photos/photo_pink_poster.jpg"
                   alt="Khushi Singh - Happy Birthday"
